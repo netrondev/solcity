@@ -1,8 +1,7 @@
 import Image from "next/image";
 import NavBar from "./nav";
-import Loading from "./loading";
+
 import Draw from "./draw";
-import Landing from "~/pages/landing";
 
 export default function Homepage() {
   return (
