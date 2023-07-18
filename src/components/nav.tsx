@@ -147,8 +147,8 @@ export default function NavBar() {
             </div>
           </div>
 
-          <Disclosure.Panel className="absolute ml-2 rounded-md bg-gray-200 shadow-lg sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
+          <Disclosure.Panel className="relative  m-3 ml-2 rounded-md bg-gray-700 shadow-lg sm:hidden">
+            <div className="relative space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
                 <Disclosure.Button
                   key={item.name}
@@ -156,9 +156,9 @@ export default function NavBar() {
                   href={item.href}
                   className={classNames(
                     item.current
-                      ? "bg-gray-300 text-white"
-                      : "text-white hover:bg-gray-700 hover:text-white",
-                    "relative z-30 block rounded-md px-3 py-2 text-base font-medium"
+                      ? " bg-gray-800 text-white"
+                      : "bg-gray-800 text-white hover:bg-gray-700 hover:text-white",
+                    " relative block rounded-md px-3 py-2 text-base font-medium"
                   )}
                   aria-current={item.current ? "page" : undefined}
                 >
