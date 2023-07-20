@@ -137,7 +137,13 @@ export function LotteryPage() {
       </div>
 
       <div className="py-5">
-        <Button onClick={() => {}}>Run Lottery</Button>
+        <Button
+          onClick={() => {
+            run_lottery({ entries });
+          }}
+        >
+          Run Lottery
+        </Button>
       </div>
     </div>
   );
