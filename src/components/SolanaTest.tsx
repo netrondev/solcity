@@ -25,12 +25,7 @@ export function SolanaTest() {
   const [balance, balance_set] = useState<number | null>(null);
   const [loaded, loaded_set] = useState<boolean>(false);
 
-  const secretKey = Uint8Array.from([
-    176, 30, 163, 155, 116, 137, 49, 76, 224, 96, 61, 75, 46, 8, 140, 143, 16,
-    131, 85, 225, 192, 71, 111, 65, 183, 136, 155, 237, 149, 81, 232, 97, 12,
-    180, 71, 145, 181, 12, 134, 168, 185, 141, 104, 208, 198, 146, 58, 104, 97,
-    132, 116, 2, 144, 61, 112, 91, 2, 114, 216, 157, 246, 245, 227, 51,
-  ]);
+  const secretKey = Uint8Array.from([]);
 
   const key = Keypair.fromSecretKey(secretKey);
   const [keypair, keypair_set] = useState<Keypair>(key);

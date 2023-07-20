@@ -27,6 +27,8 @@ function generateDummyEntries(count: number): Entry[] {
   });
 }
 
+//choose winners from entries
+
 type LotteryResult = {
   entries: Entry[];
   pot_total: number;
@@ -54,6 +56,10 @@ function split_number_percentage(props: {
   };
   return result;
 }
+// function get_winners(props: { user: string }): string {
+//   const winners = props.user[Math.floor(Math.random() * props.user.length)];
+//   return winners;
+// }
 
 function run_lottery(props: { entries: Entry[] }): LotteryResult {
   const pot_total = add_entries_to_pot_total({ entries: props.entries });
@@ -144,6 +150,13 @@ export function LotteryPage() {
         >
           Run Lottery
         </Button>
+      </div>
+      <div className="h-[300px] overflow-auto bg-white/10">
+        {run_lottery({ entries })?.winners?.map((winner) => (
+          <div key={winner.id}>
+            {winner.user} {winner.payout}
+          </div>
+        ))}
       </div>
     </div>
   );
