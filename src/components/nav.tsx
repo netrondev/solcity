@@ -9,6 +9,7 @@ const navigation = [
   { name: "Wallet", href: "wallet", current: false },
   { name: "Deposit", href: "deposit", current: false },
   { name: "Withdraw", href: "withdraw", current: false },
+  { name: "Test", href: "test", current: false },
 ];
 
 function classNames(...classes: string[]) {
