@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Draw() {
   const [days, setdays] = useState(0);

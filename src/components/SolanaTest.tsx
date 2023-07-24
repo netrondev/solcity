@@ -1,6 +1,6 @@
 import {
-  GetBalanceConfig,
-  AccountBalancePair,
+  // GetBalanceConfig,
+  // AccountBalancePair,
   Keypair,
   LAMPORTS_PER_SOL,
   Connection,
@@ -12,7 +12,6 @@ import {
 import { useEffect, useState } from "react";
 import { Panel } from "./Panel";
 
-import ReactDOM from "react-dom";
 import { QRCodeSVG } from "qrcode.react";
 import { useAppState } from "~/hooks/useAppState";
 
@@ -87,7 +86,13 @@ export function SolanaTest() {
             secret_set(e.target.value);
           }}
         ></input>
-        <button onClick={() => {}}>OK</button>
+        <button
+          onClick={() => {
+            console.log("OK clicked");
+          }}
+        >
+          OK
+        </button>
       </Panel>
 
       <Panel>
