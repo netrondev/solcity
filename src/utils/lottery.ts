@@ -2,6 +2,8 @@ import { type Entry } from "~/validation/Entry";
 import { array_total } from "./array_total";
 import { split_number_percentage } from "./split_number_percentage";
 
+import { array_pick_range } from "./array_pick_range";
+
 type LotteryResult = {
   entries: Entry[];
   pot_total: number;
@@ -10,11 +12,6 @@ type LotteryResult = {
   /** The amount left over to start the next pot. */
   pot_next: number;
 };
-
-function add_entries_to_pot_total(props: { entries: Entry[] }): number {
-  const pot_total = array_total(props.entries.map((i) => i.amount));
-  return pot_total;
-}
 
 export function lottery_pot(props: {
   entries: Entry[];
@@ -59,4 +56,37 @@ export function lottery_pot(props: {
   };
 
   return output;
+}
+
+export function lottery_calculate_winners(props: {
+  entries: Entry[];
+  pot_actual: number;
+}) {
+  let pot_remaining = props.pot_actual;
+  const winners = [];
+
+  while (pot_remaining > 0) {
+    const winner = array_pick_range({ input: props.entries, key: "amount" });
+
+    if (!winner) throw new Error("Could not pick a winner..");
+
+    const split = split_number_percentage({
+      inputnumber: pot_remaining,
+      percentage: pot_remaining < 0.01 ? 1 : 0.1,
+    });
+
+    pot_remaining = split.left;
+
+    const id_payout = crypto.randomUUID();
+
+    const payout = split.right;
+
+    const payout_message = `${winner.amount.toFixed(2)} to ${payout.toFixed(
+      2
+    )}`;
+
+    winners.push({ ...winner, id_payout, payout, payout_message });
+  }
+
+  return winners;
 }

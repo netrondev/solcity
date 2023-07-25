@@ -1,15 +1,25 @@
 import { type Entry } from "~/validation/Entry";
 import { VisualizeEntries } from "./VisualizeEntries";
-import { lottery_pot } from "~/utils/lottery_pot";
+import { lottery_calculate_winners, lottery_pot } from "~/utils/lottery";
 import { DisplayData } from "./DisplayData";
+import { array_pick_range } from "~/utils/array_pick_range";
 
 export function VisualizeLottery(props: { entries: Entry[] }) {
   // todo rollover
   const data = lottery_pot({ entries: props.entries, previous_rollover: 5 });
 
+  const winners = lottery_calculate_winners({
+    entries: props.entries,
+    pot_actual: data.pot_actual,
+  });
+
   return (
     <section>
-      <VisualizeEntries entries={props.entries} />
+      <VisualizeEntries
+        entries={props.entries}
+        id_key="user"
+        valuekey="amount"
+      />
       <div className="flex flex-wrap gap-2.5 rounded-2xl bg-white/5 p-2 text-white">
         {/* POT BREAKDOWN */}
 
@@ -58,6 +68,26 @@ export function VisualizeLottery(props: { entries: Entry[] }) {
           },
           { id: "pot_actual", label: "Pot", amount: data.pot_actual },
         ]}
+        id_key="id"
+        valuekey="amount"
+        label_key="label"
+      />
+
+      <pre>
+        {JSON.stringify(
+          array_pick_range({ input: props.entries, key: "amount" }),
+          null,
+          2
+        )}
+      </pre>
+
+      <span>Winners Simulation:</span>
+
+      <VisualizeEntries
+        entries={winners}
+        id_key="id_payout"
+        valuekey="payout"
+        label_key="payout_message"
       />
     </section>
   );

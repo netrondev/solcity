@@ -9,6 +9,7 @@ interface MyState {
   set: (state: Partial<MyState>) => void;
 }
 
+/** Persisted app state */
 export const useAppState = create<MyState>()(
   persist(
     (set, get) => ({
