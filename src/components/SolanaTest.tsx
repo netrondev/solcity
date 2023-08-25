@@ -24,10 +24,10 @@ export function SolanaTest() {
   const [balance, balance_set] = useState<number | null>(null);
   const [loaded, loaded_set] = useState<boolean>(false);
 
-  const secretKey = Uint8Array.from([]);
+  const [keypair, keypair_set] = useState<Keypair>();
 
-  const key = Keypair.fromSecretKey(secretKey);
-  const [keypair, keypair_set] = useState<Keypair>(key);
+  // const secretKey = Uint8Array.from([]);
+  // const key = Keypair.fromSecretKey(secretKey);
 
   const connection = new Connection("https://api.metaplex.solana.com");
 
@@ -106,6 +106,7 @@ export function SolanaTest() {
         ></input>
         <button
           onClick={() => {
+            if (!keypair) return;
             const transaction = new Transaction();
 
             const toPubkey = new PublicKey("targetaccountpubkeyhere");
