@@ -1,4 +1,5 @@
-import { type DetailedHTMLProps, type InputHTMLAttributes } from "react";
+import { type InputHTMLAttributes, type DetailedHTMLProps } from "react";
+import { cn } from "~/utils/cn";
 
 export function Input(
   props: DetailedHTMLProps<
@@ -6,5 +7,13 @@ export function Input(
     HTMLInputElement
   >
 ) {
-  return <input {...props} className="rounded-xl bg-white/20 p-2 text-lg " />;
+  return (
+    <input
+      {...props}
+      className={cn(
+        "rounded border-none p-2 focus:outline-none dark:bg-neutral-900",
+        props.className
+      )}
+    />
+  );
 }

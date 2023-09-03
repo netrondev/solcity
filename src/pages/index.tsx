@@ -1,19 +1,11 @@
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
 import { api } from "~/utils/api";
-import { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import Homepage from "~/components/homepage";
-const navigation = [
-  { name: "Product", href: "#" },
-  { name: "Features", href: "#" },
-  { name: "Marketplace", href: "#" },
-  { name: "Company", href: "#" },
-];
+import { HomePage } from "~/screens/HomePage";
+
 export default function Home() {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <>
@@ -25,9 +17,9 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="max-h-screen  min-h-screen ">
+      <main className="">
         <div>
-          <Homepage />
+          <HomePage />
         </div>
       </main>
     </>
