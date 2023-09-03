@@ -1,7 +1,8 @@
 import { exampleRouter } from "~/server/api/routers/example";
 import { createTRPCRouter } from "~/server/api/trpc";
-import { solcityMainRouter } from "./routers/solcity/solcityMainRouter";
+import { solcity_router } from "./routers/solcity/solcity_router";
 import { authSurrealRouter } from "./routers/auth";
+import { solana_router } from "./routers/solana/solana_router";
 
 /**
  * This is the primary router for your server.
@@ -10,8 +11,9 @@ import { authSurrealRouter } from "./routers/auth";
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
-  solcity: solcityMainRouter,
+  solcity: solcity_router,
   auth: authSurrealRouter,
+  solana: solana_router,
 });
 
 // export type definition of API

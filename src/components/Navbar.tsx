@@ -3,6 +3,7 @@ import { Avatar } from "./Avatar";
 import { NavbarAdmin } from "./NavbarAdmin";
 import { AiOutlineHome } from "react-icons/ai";
 import Button from "./Button";
+import { SolanaPublicInfo } from "./SolanaPublicInfo";
 export function Navbar() {
   const session = useSession();
   return (
@@ -19,8 +20,13 @@ export function Navbar() {
           <div className="flex-1" />
           <NavbarAdmin />
 
-          <Button>0.0 SOL</Button>
-          <Button>Deposit</Button>
+          <Button href="/wallet">
+            <SolanaPublicInfo
+              onlyString
+              publicKey={session.data.user.publicKey}
+            />
+          </Button>
+          <Button href="/deposit">Deposit</Button>
 
           <Avatar
             image={session.data.user.image}

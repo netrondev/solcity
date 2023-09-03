@@ -1,6 +1,6 @@
 import { createTRPCRouter } from "../../trpc";
 import { drawsRouter } from "./draws";
 
-export const solcityMainRouter = createTRPCRouter({
+export const solcity_router = createTRPCRouter({
   draws: drawsRouter,
 });
