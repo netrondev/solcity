@@ -1,20 +1,16 @@
 import { z } from "zod";
 import {
-  createTRPCContext,
+  adminProcedure,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "../../trpc";
-import { TRPCError } from "@trpc/server";
 import { getDB } from "~/server/db";
 
 export const drawsRouter = createTRPCRouter({
-  create_draw: protectedProcedure
+  create_draw: adminProcedure
     .input(z.object({ draw_datetime: z.date() }))
-    .mutation(async ({ ctx, input }) => {
-      if (!ctx.session.user.is_admin) {
-        throw new TRPCError({ code: "UNAUTHORIZED" });
-      }
+    .mutation(async ({ input }) => {
       const db = await getDB();
       const created = await db.create("draws", input);
       return created;

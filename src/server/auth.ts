@@ -6,6 +6,7 @@ import {
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { env } from "~/env.mjs";
+import { SurrealAdapter } from "./surrealdb_nextauth_adapter";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -35,18 +36,24 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-        is_admin: session.user.email
-          ? ["rouan@8bo.org"].includes(session.user.email)
-          : undefined,
-      },
-    }),
+    session: (props) => {
+      const { session } = props;
+
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: props.user.id,
+          is_admin: session.user.email
+            ? ["rouan@8bo.org"].includes(session.user.email)
+            : undefined,
+        },
+      };
+    },
   },
+  adapter: SurrealAdapter(),
   providers: [
+    // Todo add Solana Wallet: https://www.quicknode.com/guides/solana-development/dapps/how-to-authenticate-users-with-a-solana-wallet
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,

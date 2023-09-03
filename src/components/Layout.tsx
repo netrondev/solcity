@@ -3,12 +3,34 @@ import { Navbar } from "./Navbar";
 import { useTheme } from "next-themes";
 import { signIn, useSession } from "next-auth/react";
 import Button from "./Button";
+import { Section } from "./Section";
+
+export function AdminCheck(props: { children: ReactNode }) {
+  const session = useSession();
+
+  if (session.status === "loading") {
+    return <>LOADING...</>;
+  }
+
+  if (session.status === "authenticated" && session.data.user.is_admin) {
+    return (
+      <Section className="border border-purple-500 dark:border-purple-500">
+        {props.children}
+      </Section>
+    );
+  }
+
+  return <>NOT AUTHORIZED</>;
+}
 
 export default function Layout(props: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
-  const { systemTheme, theme, setTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
+  const {
+    // systemTheme, theme,
+    setTheme,
+  } = useTheme();
+  // const currentTheme = theme === "system" ? systemTheme : theme;
   const session = useSession();
 
   if (typeof window !== "undefined") {
@@ -26,6 +48,8 @@ export default function Layout(props: { children: ReactNode }) {
   }, [mounted]);
 
   if (session.status === "loading") return <div>loading...</div>;
+
+  // return props.children;
 
   if (session.status === "unauthenticated")
     return (
