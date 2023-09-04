@@ -26,7 +26,7 @@ export function SolanaPublicInfo(props: {
 
   if (props.onlyString) {
     return (
-      <div className="h-6">
+      <div className="flex h-6 items-center">
         {balance === null ? (
           <AiOutlineLoading3Quarters className="animate-spin" />
         ) : (
