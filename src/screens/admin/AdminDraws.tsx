@@ -1,4 +1,3 @@
-import { clear } from "console";
 import moment from "moment";
 import { useState } from "react";
 import Button from "~/components/Button";
