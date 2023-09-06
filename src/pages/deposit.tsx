@@ -1,3 +1,3 @@
-import { DepositScreen } from "~/screens/Deposit";
+import { DepositScreen } from "~/screens/wallet/Deposit";
 
 export default DepositScreen;

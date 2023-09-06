@@ -38,7 +38,6 @@ export default function Layout(props: { children: ReactNode }) {
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", function (e) {
-        console.log("changed!!", e.matches);
         const systemThemeUpdate = e.matches ? "dark" : "light";
         setTheme(systemThemeUpdate);
       });

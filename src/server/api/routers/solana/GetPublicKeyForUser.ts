@@ -10,7 +10,17 @@ type KeypairsDBEntry = {
   updated_at: Date;
 };
 
-export async function GetPublicKeyForUser(inputs: { user_id: string }) {
+/** Gets the user wallet public key. SAVE TO USE */
+export async function GetPublicKeyForUser(inputs: {
+  user_id: string;
+}): Promise<{ publicKey: string }> {
+  const getKeyPair = await GetSecretKeypairForUser({ user_id: inputs.user_id });
+  // only return publicKey!
+  return { publicKey: getKeyPair.keypair.publicKey.toJSON() };
+}
+
+/** WARNING this could leak private keys. USE WITH CAUTION! */
+export async function GetSecretKeypairForUser(inputs: { user_id: string }) {
   const db = await getDB();
 
   const wallets_data = await db.query<[KeypairsDBEntry[]]>(
@@ -50,6 +60,6 @@ export async function GetPublicKeyForUser(inputs: { user_id: string }) {
     );
   }
 
-  const publicKey = keypair.publicKey.toJSON();
-  return { publicKey };
+  // const publicKey = keypair.publicKey.toJSON();
+  return { keypair };
 }

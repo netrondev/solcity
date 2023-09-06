@@ -199,13 +199,8 @@ export function SurrealAdapter(): Adapter {
         `SELECT * FROM session WHERE sessionToken = "${sessionToken}";`
       );
 
-      console.log("======== session_data");
-      console.log(JSON.stringify({ session_data }, null, 2));
-
       const session = queryParse(session_data, AdapaterSessionZod);
 
-      console.log("======== session parsed");
-      console.log(JSON.stringify({ session }, null, 2));
       if (!session) {
         console.log(chalk.red("No session data."));
         return null;
@@ -223,19 +218,22 @@ export function SurrealAdapter(): Adapter {
       // });
 
       const user_data = await client.query(`SELECT * FROM ${session.userId};`);
-      console.log(JSON.stringify({ user_data }, null, 2));
+
       const user = queryParse(user_data, AdapterUserZod);
       if (!user) return null;
+
+      console.log("User activity ", user.email);
 
       return { user, session };
     },
     async updateSession(data) {
-      console.log(chalk.cyan("SurrealAdapter", "updateSession", data.userId));
+      console.log(chalk.cyan("SurrealAdapter", "updateSession"));
       const client = await getDB();
+      data.sessionToken;
       const session_data = await client.query(
-        `UPDATE session WHERE sessionToken = ${
+        `UPDATE session SET expires = "${data.expires?.toISOString()}" WHERE sessionToken = "${
           data.sessionToken
-        } CONTENT ${JSON.stringify(data)};`
+        }";`
       );
 
       // const session = await client.update<AdapterSession & { id?: string }>(
