@@ -1,32 +1,38 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar } from "./Avatar";
 import { NavbarAdmin } from "./NavbarAdmin";
-import { AiOutlineHome } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineLoading3Quarters } from "react-icons/ai";
 import Button from "./Button";
 import { SolanaPublicInfo } from "./SolanaPublicInfo";
+import { Heading } from "./Heading";
+import { useAppState } from "~/hooks/useAppState";
 export function Navbar() {
   const session = useSession();
+  const appState = useAppState();
+
   return (
     <nav className="flex gap-2 p-2">
       <Button
-        className="aspect-square items-center dark:bg-transparent dark:text-neutral-500 dark:hover:bg-transparent hover:dark:text-white"
+        className="items-center gap-0 border-none text-white dark:bg-transparent dark:text-white dark:hover:bg-transparent hover:dark:text-white"
         href="/"
       >
-        <AiOutlineHome size={20} />
+        SolCity
       </Button>
+      <div className="flex-1" />
 
       {session.status === "authenticated" && (
         <>
-          <div className="flex-1" />
           <NavbarAdmin />
 
-          <Button href="/wallet">
+          <Button href="/wallet" className="h-7 items-center">
             <SolanaPublicInfo
               onlyString
               publicKey={session.data.user.publicKey}
+              onGetBalance={(balance_lamports) => {
+                appState.set({ balance_lamports });
+              }}
             />
           </Button>
-          <Button href="/deposit">Deposit</Button>
 
           <Avatar
             image={session.data.user.image}
@@ -38,15 +44,17 @@ export function Navbar() {
         </>
       )}
       {session.status === "unauthenticated" && (
-        <>
-          <button
-            onClick={() => {
-              void signIn();
-            }}
-          >
-            SIGNIN
-          </button>
-        </>
+        <Button
+          onClick={() => {
+            void signIn();
+          }}
+        >
+          Sign in with Discord
+        </Button>
+      )}
+
+      {session.status === "loading" && (
+        <AiOutlineLoading3Quarters className="animate-spin self-center text-emerald-400" />
       )}
     </nav>
   );

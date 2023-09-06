@@ -51,53 +51,30 @@ export default function Layout(props: { children: ReactNode }) {
 
   // return props.children;
 
-  if (router.asPath.startsWith("/adminsecretpages4y839nmfgk345l")) {
-    return (
-      <div>
-        BETA ACCESS
-        <div className="min-h-screen border-neutral-300 bg-neutral-300 dark:border-neutral-500 dark:bg-neutral-800">
-          <div className="mx-auto flex max-w-7xl flex-col gap-5 pt-5">
-            <Navbar />
+  // if (session.status === "unauthenticated")
+  //   return (
+  //     <div className="p-10">
+  //       SolCity.tech
+  //       <Button
+  //         onClick={() => {
+  //           signIn().catch(console.error);
+  //         }}
+  //       >
+  //         Signin
+  //       </Button>
+  //     </div>
+  //   );
 
-            {props.children}
-          </div>
-        </div>
+  // if (session.status === "authenticated") {
+  return (
+    <div className="min-h-screen overflow-auto border-neutral-300 bg-neutral-950 font-mono text-emerald-100/80">
+      <div className="mx-auto flex max-w-2xl flex-col gap-5 pt-5">
+        <Navbar />
+        {props.children}
       </div>
-    );
-  }
+    </div>
+  );
+  // }
 
-  if (session.status === "unauthenticated")
-    return (
-      <div className="p-10">
-        SolCity.tech
-        <Button
-          onClick={() => {
-            signIn().catch(console.error);
-          }}
-        >
-          Signin
-        </Button>
-      </div>
-    );
-
-  if (session.status === "authenticated" && session.data.user.is_admin) {
-    return (
-      <div>
-        BETA ACCESS
-        <div className="min-h-screen border-neutral-300 bg-neutral-300 dark:border-neutral-500 dark:bg-neutral-800">
-          <div className="mx-auto flex max-w-7xl flex-col gap-5 pt-5">
-            <Navbar />
-
-            {props.children}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (session.status === "authenticated" && !session.data.user.is_admin) {
-    return <div>SIGNED UP! Coming soon!</div>;
-  }
-
-  return <div>...</div>;
+  // return <div>...</div>;
 }

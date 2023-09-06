@@ -46,15 +46,16 @@ export default function Button(
       <button
         {...rest}
         className={cn(
-          "flex border font-normal tracking-wider text-neutral-600 transition dark:text-sky-400/70",
-          size === "sm" && "gap-1 rounded px-2 py-1 text-sm",
-          size === "md" || (!size && "gap-3 rounded-md p-1 px-2 font-normal"),
+          "flex whitespace-nowrap border-none font-bold tracking-wider text-black transition",
+          size === "sm" && "gap-1 px-2 py-1 text-sm",
+          size === "md" ||
+            (!size && "gap-3 rounded-sm p-1 px-2 text-sm font-semibold"),
           size == "lg" && "gap-4 rounded-xl p-3",
           active
-            ? "border-purple-300 bg-purple-700/10 text-purple-600"
+            ? "bg-sky-500 text-black"
             : cn(
-                "bg-neutral-100 text-neutral-500 hover:bg-sky-200",
-                "dark:border-sky-800 dark:bg-sky-950/50 hover:dark:border-sky-500 hover:dark:bg-sky-950 hover:dark:text-sky-200"
+                "bg-emerald-400 text-black ",
+                props.disabled != true && "cursor-pointer hover:bg-emerald-200"
               ),
           // active === false && "opacity-90",
 

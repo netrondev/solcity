@@ -10,9 +10,9 @@ export function NavbarAdmin() {
 
   if (session.data.user.is_admin)
     return (
-      <>
+      <div>
         <Button href="/admin">Admin</Button>
-      </>
+      </div>
     );
 
   return null;

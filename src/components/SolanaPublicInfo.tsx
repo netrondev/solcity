@@ -8,6 +8,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 export function SolanaPublicInfo(props: {
   publicKey: string;
   onlyString?: boolean;
+  onGetBalance?: (balance: number) => void;
 }) {
   const [balance, setBalance] = useState<number | null>(null);
 
@@ -17,6 +18,7 @@ export function SolanaPublicInfo(props: {
     const connection = new Connection("https://api.metaplex.solana.com");
 
     const value = await connection.getBalance(pub);
+    if (props.onGetBalance) props.onGetBalance(value);
     setBalance(value);
   }
 
@@ -26,18 +28,18 @@ export function SolanaPublicInfo(props: {
 
   if (props.onlyString) {
     return (
-      <div className="flex h-6 items-center">
+      <>
         {balance === null ? (
           <AiOutlineLoading3Quarters className="animate-spin" />
         ) : (
-          <pre>{(balance / LAMPORTS_PER_SOL).toFixed(8)} SOL</pre>
+          <>{(balance / LAMPORTS_PER_SOL).toFixed(8)} SOL</>
         )}
-      </div>
+      </>
     );
   }
 
   return (
-    <Section className="flex flex-row">
+    <Section className="flex flex-row gap-4">
       <div className="self-start rounded bg-white p-2">
         <QRCodeSVG value={props.publicKey} />
       </div>

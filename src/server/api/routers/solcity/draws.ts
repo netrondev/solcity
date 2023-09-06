@@ -60,7 +60,7 @@ export const drawsRouter = createTRPCRouter({
       return created;
     }),
 
-  list: protectedProcedure.query(async () => {
+  list: publicProcedure.query(async () => {
     const db = await getDB();
 
     const draws = await db.query<
@@ -86,26 +86,45 @@ export const drawsRouter = createTRPCRouter({
 
     console.log(parsed);
 
-    return parsed.map((i) => ({ ...i, ...i.draws, draws: undefined }));
-  }),
-  current: publicProcedure.query(async () => {
-    const db = await getDB();
+    let first_open_found = false;
 
-    const draw = await db.query(
-      `SELECT * FROM draws WHERE draw_datetime > time::now() ORDER BY draw_datetime ASC LIMIT 1;`
-    );
+    const draw_calc = parsed
+      .map((i) => ({
+        ...i,
+        ...i.draws,
+        draws: undefined,
+      }))
+      .map((i) => ({
+        ...i,
+        is_closed: i.draw_datetime.getTime() < new Date().getTime(),
+        is_open: i.draw_datetime.getTime() > new Date().getTime(),
+      }))
+      .sort((a, b) => (a.draw_datetime > b.draw_datetime ? 1 : -1))
+      .map((i) => {
+        let is_next = false;
 
-    const res = z.array(
-      z.object({
-        result: z.array(
-          z.object({ id: z.string(), draw_datetime: z.coerce.date() })
-        ),
+        if (i.is_open && !first_open_found) {
+          is_next = true;
+          first_open_found = true;
+        }
+
+        return {
+          ...i,
+          is_next,
+        };
       })
-    );
+      .map((i, idx, arr) => {
+        let is_last = false;
+        const next = arr[idx + 1];
+        if (i.is_closed) {
+          if ((next && next.is_open) ?? !next) {
+            is_last = true;
+          }
+        }
 
-    const p = res.parse(draw);
-    const output = p.at(0)?.result.at(0);
+        return { ...i, is_last };
+      });
 
-    return output;
+    return draw_calc;
   }),
 });
