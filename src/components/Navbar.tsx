@@ -45,6 +45,8 @@ export function Navbar() {
       )}
       {session.status === "unauthenticated" && (
         <Button
+          disabled
+          className="opacity-50"
           onClick={() => {
             void signIn();
           }}
