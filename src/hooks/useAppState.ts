@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 interface AppState {
-  balance_lamports: number | null;
+  balance_lamports: number;
   set: (partial: Partial<AppState>) => void;
 }
 
 export const useAppState = create<AppState>()((set) => ({
-  balance_lamports: null,
+  balance_lamports: 0,
   set,
 }));
