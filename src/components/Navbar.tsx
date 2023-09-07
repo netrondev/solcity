@@ -1,10 +1,10 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar } from "./Avatar";
 import { NavbarAdmin } from "./NavbarAdmin";
-import { AiOutlineHome, AiOutlineLoading3Quarters } from "react-icons/ai";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Button from "./Button";
 import { SolanaPublicInfo } from "./SolanaPublicInfo";
-import { Heading } from "./Heading";
+
 import { useAppState } from "~/hooks/useAppState";
 export function Navbar() {
   const session = useSession();

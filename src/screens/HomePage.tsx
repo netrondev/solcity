@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Heading } from "~/components/Heading";
 import { Section } from "~/components/Section";
 import Button from "~/components/Button";
+import { DrawHistory } from "./DrawHistory";
+import { Disclosure } from "@headlessui/react";
 
 export function HomePage() {
   return (
@@ -30,8 +32,6 @@ export function HomePage() {
           </Link>
         </div>
       </Section>
-
-      <Button>View past draws</Button>
     </div>
   );
 }

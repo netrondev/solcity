@@ -1,8 +1,8 @@
 import { useEffect, type ReactNode, useState } from "react";
 import { Navbar } from "./Navbar";
 import { useTheme } from "next-themes";
-import { signIn, useSession } from "next-auth/react";
-import Button from "./Button";
+import { useSession } from "next-auth/react";
+
 import { Section } from "./Section";
 import { useRouter } from "next/router";
 

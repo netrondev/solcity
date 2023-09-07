@@ -92,7 +92,7 @@ export function DrawDisplay({
       <span className="text-3xl font-bold text-gray-900 dark:text-white">
         <SolanaPublicInfo onlyString publicKey={draw.publicKey} />
       </span>
-      <Countdown target={draw.draw_datetime} />
+      {draw.is_next && <Countdown target={draw.draw_datetime} />}
       <span className="text-sm opacity-50">
         {moment(draw.draw_datetime).format("Do MMM YYYY [at] h:mm a")}
         &nbsp;
