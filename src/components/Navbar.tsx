@@ -13,7 +13,7 @@ export function Navbar() {
   return (
     <nav className="flex gap-2 p-2">
       <Button
-        className="items-center gap-0 border-none text-white dark:bg-transparent dark:text-white dark:hover:bg-transparent hover:dark:text-white"
+        className="items-center gap-0 border-none text-gray-900 dark:bg-transparent dark:text-white dark:hover:bg-transparent hover:dark:text-white"
         href="/"
       >
         SolCity
