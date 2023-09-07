@@ -7,11 +7,7 @@ import Button from "~/components/Button";
 
 export function HomePage() {
   return (
-<<<<<<< Updated upstream
-    <div className="flex flex-col gap-5">
-=======
     <div className="flex flex-col gap-5 bg-gray-50 dark:bg-neutral-950">
->>>>>>> Stashed changes
       <DrawCurrent />
 
       <Section className="gap-4">
