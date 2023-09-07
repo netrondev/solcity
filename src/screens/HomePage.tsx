@@ -7,7 +7,7 @@ import Button from "~/components/Button";
 
 export function HomePage() {
   return (
-    <div className="flex flex-col gap-5 bg-gray-50">
+    <div className="flex flex-col gap-5 bg-gray-50 dark:bg-neutral-950">
       <DrawCurrent />
 
       <Section className="gap-4">
