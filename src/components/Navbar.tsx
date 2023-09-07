@@ -46,7 +46,7 @@ export function Navbar() {
       {session.status === "unauthenticated" && (
         <Button
           onClick={() => {
-            void signIn();
+            void signIn("discord");
           }}
         >
           Sign in with Discord
