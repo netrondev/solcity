@@ -50,7 +50,9 @@ export const authOptions: NextAuthOptions = {
           id: props.user.id,
           publicKey: pub.publicKey,
           is_admin: session.user.email
-            ? ["rouan@8bo.org"].includes(session.user.email)
+            ? ["rouan@8bo.org", "tiaancode1@gmail.com"].includes(
+                session.user.email
+              )
             : undefined,
         },
       };

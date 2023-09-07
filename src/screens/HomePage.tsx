@@ -7,7 +7,7 @@ import Button from "~/components/Button";
 
 export function HomePage() {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 bg-gray-50">
       <DrawCurrent />
 
       <Section className="gap-4">
@@ -18,7 +18,7 @@ export function HomePage() {
           hackathon. DISCLAIMER: THIS IS EARLY BETA SOFTWARE. USE AT OWN RISK.
         </p>
 
-        <div className="flex bg-black">
+        <div className="flex  bg-black ">
           <Link href="https://solana.com/hyperdrive" className="flex-1">
             <Image
               src="/hyperdrive.png"
