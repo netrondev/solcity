@@ -18,7 +18,7 @@ export function HomePage() {
           hackathon. DISCLAIMER: THIS IS EARLY BETA SOFTWARE. USE AT OWN RISK.
         </p>
 
-        <div className="flex bg-black">
+        <div className="flex  bg-black ">
           <Link href="https://solana.com/hyperdrive" className="flex-1">
             <Image
               src="/hyperdrive.png"

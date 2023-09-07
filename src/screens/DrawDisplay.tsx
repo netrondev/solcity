@@ -89,7 +89,7 @@ export function DrawDisplay({
       {draw.is_closed && <Heading>Past Draw</Heading>}
       {draw.is_next && <Heading>Current Draw</Heading>}
 
-      <span className="text-3xl font-bold text-white">
+      <span className="text-3xl font-bold text-gray-900 dark:text-white">
         <SolanaPublicInfo onlyString publicKey={draw.publicKey} />
       </span>
       <Countdown target={draw.draw_datetime} />
@@ -105,7 +105,7 @@ export function DrawDisplay({
             <>
               {appState.balance_lamports != null && (
                 <>
-                  <Section className="">
+                  <Section className="shadow-none">
                     <div className="flex flex-row items-center gap-1">
                       <Input
                         type="number"
@@ -119,7 +119,7 @@ export function DrawDisplay({
                         }}
                       />
                       <Button
-                        className="bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 hover:text-emerald-300"
+                        // className="bg-emerald-500 bg-emerald-500/10 text-gray-900 hover:bg-emerald-500/20 hover:text-emerald-300 dark:text-emerald-500"
                         onClick={() => {
                           if (!appState.balance_lamports) return;
                           setEnterSol(userSolMaxMinusFee);

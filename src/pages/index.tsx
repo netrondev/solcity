@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import { HomePage } from "~/screens/HomePage";
 
 export default function Home() {
+  const session = useSession();
   return (
     <>
       <Head>
@@ -15,7 +16,8 @@ export default function Home() {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="">
+      <main className="bg-gray-50">
+        {/* <pre>{JSON.stringify(session, null, 2)}</pre> */}
         <HomePage />
       </main>
     </>
