@@ -24,7 +24,7 @@ const config = {
         protocol: "https",
         hostname: "cdn.discordapp.com",
         port: "",
-        pathname: "/**",
+        pathname: "/**/**",
       },
     ],
   },

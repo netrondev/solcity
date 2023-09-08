@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Heading } from "~/components/Heading";
 import { Section } from "~/components/Section";
 import Button from "~/components/Button";
+import { DrawHistory } from "./DrawHistory";
 import { HowItWorks } from "./HowItWorks";
 
 export function HomePage() {

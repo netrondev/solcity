@@ -1,8 +1,8 @@
 import { useEffect, type ReactNode, useState } from "react";
 import { Navbar } from "./Navbar";
 import { useTheme } from "next-themes";
-import { signIn, useSession } from "next-auth/react";
-import Button from "./Button";
+import { useSession } from "next-auth/react";
+
 import { Section } from "./Section";
 import { useRouter } from "next/router";
 
@@ -68,7 +68,7 @@ export default function Layout(props: { children: ReactNode }) {
   // if (session.status === "authenticated") {
   return (
     <div className="min-h-screen overflow-auto border-neutral-300 bg-gray-50 font-mono text-gray-900 dark:bg-neutral-950 dark:text-emerald-100/80">
-      <div className="mx-auto flex max-w-2xl flex-col gap-5 pt-5">
+      <div className="mx-auto flex max-w-3xl flex-col gap-5 pt-5">
         <Navbar />
         {props.children}
       </div>
