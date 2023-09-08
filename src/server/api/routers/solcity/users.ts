@@ -1,10 +1,8 @@
 import { getDB } from "~/server/db";
-import { createTRPCRouter, publicProcedure } from "../../trpc";
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+import { adminProcedure, createTRPCRouter } from "../../trpc";
 
 export const usersRouter = createTRPCRouter({
-  list: publicProcedure.query(async () => {
+  list: adminProcedure.query(async () => {
     const db = await getDB();
 
     const command = await db.query<
