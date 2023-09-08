@@ -4,14 +4,9 @@ import Button from "~/components/Button";
 import { Input } from "~/components/Input";
 import { Section } from "~/components/Section";
 import { api } from "~/utils/api";
-
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
 import { SolanaPublicInfo } from "~/components/SolanaPublicInfo";
+import { Table } from "~/components/Table";
+import { Heading } from "~/components/Heading";
 
 function AdminCreateDraw() {
   const [draw_datetime, setDrawDate] = useState<Date>(
@@ -24,7 +19,7 @@ function AdminCreateDraw() {
 
   return (
     <Section>
-      <h1>Create new Draw</h1>
+      <Heading>Create new Draw</Heading>
       <div className="flex items-center gap-2">
         <Input
           type="datetime-local"
@@ -61,78 +56,36 @@ function AdminCreateDraw() {
 function AdminDrawList() {
   const draws = api.solcity.draws.list.useQuery();
 
-  const table = useReactTable({
-    data: draws.data ?? [],
-    columns: [
-      {
-        accessorKey: "id",
-      },
-      {
-        accessorKey: "publicKey",
-        header: "Balance",
-        cell: (c) => {
-          return (
-            <SolanaPublicInfo publicKey={c.row.original.publicKey} onlyString />
-          );
-        },
-      },
-      {
-        accessorKey: "draw_datetime",
-        cell: (c) => {
-          return <span>{moment(c.row.original.draw_datetime).fromNow()}</span>;
-        },
-      },
-    ],
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   return (
     <Section>
-      <table className="text-left">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
-                      )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
-      </table>
+      <Table
+        data={draws.data ?? []}
+        columns={[
+          {
+            accessorKey: "id",
+          },
+          {
+            accessorKey: "publicKey",
+            header: "Balance",
+            cell: (c) => {
+              return (
+                <SolanaPublicInfo
+                  publicKey={c.row.original.publicKey}
+                  onlyString
+                />
+              );
+            },
+          },
+          {
+            accessorKey: "draw_datetime",
+            cell: (c) => {
+              return (
+                <span>{moment(c.row.original.draw_datetime).fromNow()}</span>
+              );
+            },
+          },
+        ]}
+      />
     </Section>
   );
 }

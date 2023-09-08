@@ -12,10 +12,13 @@ export function SolanaPublicInfo(props: {
 }) {
   const [balance, setBalance] = useState<number | null>(null);
 
+  // todo make trpc endpoint instead
   async function GetBalance(publicKey: string) {
     setBalance(null);
     const pub = new PublicKey(publicKey);
-    const connection = new Connection("https://api.metaplex.solana.com");
+    const connection = new Connection(
+      "https://ultra-old-night.solana-mainnet.discover.quiknode.pro/a26d599c6398bc9616dca4e316cddb38d7fe4d32/"
+    );
 
     const value = await connection.getBalance(pub);
     if (props.onGetBalance) props.onGetBalance(value);

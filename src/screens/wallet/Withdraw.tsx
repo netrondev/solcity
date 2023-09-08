@@ -1,6 +1,7 @@
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { useState } from "react";
 import Button from "~/components/Button";
+import { Heading } from "~/components/Heading";
 import { Input } from "~/components/Input";
 import { Section } from "~/components/Section";
 import { api } from "~/utils/api";
@@ -13,7 +14,8 @@ export function WithdrawScreen() {
 
   return (
     <Section>
-      Withdraw Address:
+      <Heading>Withdraw</Heading>
+
       <p className="text-xs opacity-50">
         WARNING, double check your wallet target address. Amount entered will be
         sent, but an additional small fee will be deducted to process the

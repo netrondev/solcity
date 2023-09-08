@@ -19,6 +19,8 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { TRPCError } from "@trpc/server";
+import { GetSecretKeypairForUser } from "../solana/GetPublicKeyForUser";
+import { solanaWithdrawal } from "../solana/Withdraw";
 
 export const drawsRouter = createTRPCRouter({
   /** DEV ENDPOINT TO CLEAR OLD DRAWS */
@@ -127,4 +129,19 @@ export const drawsRouter = createTRPCRouter({
 
     return draw_calc;
   }),
+  enter_draw: protectedProcedure
+    .input(z.object({ toPubkey: z.string().min(8), lamports: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const getKeypair = await GetSecretKeypairForUser({
+        user_id: ctx.session.user.id,
+      });
+
+      const result = await solanaWithdrawal({
+        keypair: getKeypair.keypair,
+        toPubkey: new PublicKey(input.toPubkey),
+        lamports: input.lamports,
+      });
+
+      return result;
+    }),
 });

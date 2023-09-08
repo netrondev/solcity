@@ -6,6 +6,7 @@ import {
 } from "./GetPublicKeyForUser";
 import { solanaWithdrawal } from "./Withdraw";
 import { PublicKey } from "@solana/web3.js";
+import { GetTransactionHistory } from "./GetTXHistory";
 
 export const solana_wallet_router = createTRPCRouter({
   account: protectedProcedure.query(async ({ ctx }) => {
@@ -27,4 +28,10 @@ export const solana_wallet_router = createTRPCRouter({
 
       return result;
     }),
+  GetTransactionHistory: protectedProcedure.query(async ({ ctx }) => {
+    const data = await GetTransactionHistory(
+      new PublicKey(ctx.session.user.publicKey)
+    );
+    return data;
+  }),
 });

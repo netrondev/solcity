@@ -28,6 +28,9 @@ export const env = createEnv({
     SURREALDB_PASS: z.string(),
     SURREALDB_NS: z.string(),
     SURREALDB_DB: z.string(),
+
+    // solana
+    SOLANA_RPC: z.string(),
   },
 
   /**
@@ -56,6 +59,8 @@ export const env = createEnv({
     SURREALDB_PASS: process.env.SURREALDB_PASS,
     SURREALDB_NS: process.env.SURREALDB_NS,
     SURREALDB_DB: process.env.SURREALDB_DB,
+    // solana
+    SOLANA_RPC: process.env.SOLANA_RPC,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
