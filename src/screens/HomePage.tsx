@@ -6,6 +6,7 @@ import { Section } from "~/components/Section";
 import Button from "~/components/Button";
 import { DrawHistory } from "./DrawHistory";
 import { Disclosure } from "@headlessui/react";
+// import FooterNav from "~/components/footer";
 
 export function HomePage() {
   return (
@@ -32,6 +33,7 @@ export function HomePage() {
           </Link>
         </div>
       </Section>
+      {/* <FooterNav /> */}
     </div>
   );
 }

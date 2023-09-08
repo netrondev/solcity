@@ -12,7 +12,7 @@ export function DrawHistory() {
       {drawList.data
         ?.filter((i) => !i.is_open)
         //only show 3 draws
-
+        .reverse()
         .map((draw) => (
           <DrawDisplay key={draw.id} draw={draw} />
         ))}

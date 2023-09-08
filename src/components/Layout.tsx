@@ -68,7 +68,7 @@ export default function Layout(props: { children: ReactNode }) {
   // if (session.status === "authenticated") {
   return (
     <div className="min-h-screen overflow-auto border-neutral-300 bg-gray-50 font-mono text-gray-900 dark:bg-neutral-950 dark:text-emerald-100/80">
-      <div className="mx-auto flex max-w-2xl flex-col gap-5 pt-5">
+      <div className="mx-auto flex max-w-3xl flex-col gap-5 pt-5">
         <Navbar />
         {props.children}
       </div>

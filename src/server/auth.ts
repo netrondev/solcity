@@ -8,6 +8,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import { env } from "~/env.mjs";
 import { SurrealAdapter } from "./surrealdb_nextauth_adapter";
 import { GetPublicKeyForUser } from "./api/routers/solana/GetPublicKeyForUser";
+import { adminusers } from "./adminusers";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -50,9 +51,7 @@ export const authOptions: NextAuthOptions = {
           id: props.user.id,
           publicKey: pub.publicKey,
           is_admin: session.user.email
-            ? ["rouan@8bo.org", "tiaancode1@gmail.com"].includes(
-                session.user.email
-              )
+            ? adminusers.includes(session.user.email)
             : undefined,
         },
       };
