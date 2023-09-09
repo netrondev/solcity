@@ -1,7 +1,5 @@
 import { api } from "~/utils/api";
 import { DrawDisplay } from "./DrawDisplay";
-import { Disclosure } from "@headlessui/react";
-import Button from "~/components/Button";
 import { DrawHistory } from "./DrawHistory";
 
 export function DrawCurrent() {
@@ -24,7 +22,7 @@ export function DrawCurrent() {
       {drawList.data
         ?.filter((i) => i.is_next)
         .map((draw) => (
-          <DrawDisplay key={draw.id} draw={draw} />
+          <DrawDisplay showLink key={draw.id} draw={draw} />
         ))}
 
       <div className="hidden">

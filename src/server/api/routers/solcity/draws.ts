@@ -6,21 +6,10 @@ import {
   publicProcedure,
 } from "../../trpc";
 import { getDB } from "~/server/db";
-
-import {
-  // GetBalanceConfig,
-  // AccountBalancePair,
-  Keypair,
-  LAMPORTS_PER_SOL,
-  Connection,
-  Transaction,
-  SystemProgram,
-  PublicKey,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js";
+import { Keypair, PublicKey } from "@solana/web3.js";
 import { TRPCError } from "@trpc/server";
 import { GetSecretKeypairForUser } from "../solana/GetPublicKeyForUser";
-import { solanaWithdrawal } from "../solana/Withdraw";
+import { SendAndConfirm } from "../solana/Withdraw";
 
 export const drawsRouter = createTRPCRouter({
   /** DEV ENDPOINT TO CLEAR OLD DRAWS */
@@ -86,8 +75,6 @@ export const drawsRouter = createTRPCRouter({
       )
       .parse(output);
 
-    console.log(parsed);
-
     let first_open_found = false;
 
     const draw_calc = parsed
@@ -136,7 +123,7 @@ export const drawsRouter = createTRPCRouter({
         user_id: ctx.session.user.id,
       });
 
-      const result = await solanaWithdrawal({
+      const result = await SendAndConfirm({
         keypair: getKeypair.keypair,
         toPubkey: new PublicKey(input.toPubkey),
         lamports: input.lamports,

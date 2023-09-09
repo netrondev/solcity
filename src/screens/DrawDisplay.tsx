@@ -8,7 +8,7 @@ import { Input } from "~/components/Input";
 import { Section } from "~/components/Section";
 import { SolanaPublicInfo } from "~/components/SolanaPublicInfo";
 import { useAppState } from "~/hooks/useAppState";
-import { type RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 import {
   // GetBalanceConfig,
   // AccountBalancePair,
@@ -49,55 +49,74 @@ async function PredictFee(input: {
 
 export function DrawDisplay({
   draw,
+  showLink,
+  showEntries,
 }: {
   draw: RouterOutputs["solcity"]["draws"]["list"][number];
+  showLink?: boolean;
+  showEntries?: boolean;
 }) {
   const appState = useAppState();
   const session = useSession();
 
-  const userSol = appState.balance_lamports
-    ? appState.balance_lamports / LAMPORTS_PER_SOL
+  const api_enter_draw = api.solcity.draws.enter_draw.useMutation();
+
+  const userLamports = appState.balance_lamports
+    ? appState.balance_lamports
     : 0;
 
   const [feeprediction, setFeePrediction] = useState<number>(5000);
-  const feeSol = feeprediction / LAMPORTS_PER_SOL;
-  const userSolMaxMinusFee = userSol - feeSol;
+  const userLamportsMaxMinusFee = userLamports - feeprediction;
 
-  const [enter_sol, setEnterSol] = useState(
-    userSolMaxMinusFee > 0 ? userSolMaxMinusFee : 0
+  const [enter_lamports, setEnterSol] = useState(
+    userLamportsMaxMinusFee > 0 ? userLamportsMaxMinusFee : 0
   );
 
   useEffect(() => {
-    if (userSolMaxMinusFee > 0 && enter_sol <= feeSol) {
-      setEnterSol(userSolMaxMinusFee);
+    if (userLamportsMaxMinusFee > 0 && enter_lamports <= feeprediction) {
+      setEnterSol(userLamportsMaxMinusFee);
     }
     if (session.data) {
       PredictFee({
         fromPubkey: new PublicKey(session.data.user.publicKey),
         toPubkey: new PublicKey(draw.publicKey),
-        lamports: enter_sol,
+        lamports: enter_lamports,
       })
         .then((fee) => {
           if (fee) setFeePrediction(fee);
         })
         .catch(console.error);
     }
-  }, [appState.balance_lamports, enter_sol]);
+  }, [
+    appState.balance_lamports,
+    draw.publicKey,
+    enter_lamports,
+    feeprediction,
+    session.data,
+    userLamportsMaxMinusFee,
+  ]);
 
   return (
     <Section className="gap-0">
-      {draw.is_closed && <Heading>Past Draw</Heading>}
-      {draw.is_next && <Heading>Current Draw</Heading>}
+      <div className="flex flex-row">
+        <div className="flex flex-1 flex-col">
+          {draw.is_closed && <Heading>Past Draw</Heading>}
+          {draw.is_next && <Heading>Current Draw</Heading>}
 
-      <span className="text-3xl font-bold text-gray-900 dark:text-white">
-        <SolanaPublicInfo onlyString publicKey={draw.publicKey} />
-      </span>
-      {draw.is_next && <Countdown target={draw.draw_datetime} />}
-      <span className="text-sm opacity-50">
-        {moment(draw.draw_datetime).format("Do MMM YYYY [at] h:mm a")}
-        &nbsp;
-        {Intl.DateTimeFormat().resolvedOptions().timeZone} time
-      </span>
+          <span className="text-3xl font-bold text-gray-900 dark:text-white">
+            <SolanaPublicInfo onlyString publicKey={draw.publicKey} />
+          </span>
+          {draw.is_next && <Countdown target={draw.draw_datetime} />}
+          <span className="text-sm opacity-50">
+            {moment(draw.draw_datetime).format("Do MMM YYYY [at] h:mm a")}
+            &nbsp;
+            {Intl.DateTimeFormat().resolvedOptions().timeZone} time
+          </span>
+        </div>
+        {showLink && (
+          <Button href={`/draw/${draw.id.split(":")[1]!}`}>View</Button>
+        )}
+      </div>
 
       {draw.is_open && session.status === "authenticated" && (
         <Section>
@@ -109,25 +128,37 @@ export function DrawDisplay({
                     <div className="flex flex-row items-center gap-1">
                       <Input
                         type="number"
-                        value={enter_sol}
+                        value={enter_lamports / LAMPORTS_PER_SOL}
                         className="w-full appearance-none"
-                        max={userSolMaxMinusFee}
+                        max={userLamportsMaxMinusFee}
                         onChange={(e) => {
                           if (!appState.balance_lamports) return;
 
-                          setEnterSol(e.target.valueAsNumber);
+                          setEnterSol(
+                            e.target.valueAsNumber * LAMPORTS_PER_SOL
+                          );
                         }}
                       />
                       <Button
                         // className="bg-emerald-500 bg-emerald-500/10 text-gray-900 hover:bg-emerald-500/20 hover:text-emerald-300 dark:text-emerald-500"
                         onClick={() => {
                           if (!appState.balance_lamports) return;
-                          setEnterSol(userSolMaxMinusFee);
+                          setEnterSol(userLamportsMaxMinusFee);
                         }}
                       >
                         MAX
                       </Button>
-                      <Button className="self-center">ENTER THIS DRAW</Button>
+                      <Button
+                        className="self-center"
+                        onClick={() => {
+                          api_enter_draw.mutate({
+                            lamports: enter_lamports,
+                            toPubkey: draw.publicKey,
+                          });
+                        }}
+                      >
+                        ENTER THIS DRAW
+                      </Button>
                     </div>
                     {feeprediction && (
                       <span className="text-right text-xs">

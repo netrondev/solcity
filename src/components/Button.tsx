@@ -54,8 +54,9 @@ export default function Button(
           active
             ? "bg-sky-500 text-black"
             : cn(
-                "bg-emerald-500 text-black dark:text-white",
-                props.disabled != true && "cursor-pointer hover:bg-emerald-200"
+                "bg-emerald-500 text-emerald-100 dark:text-black",
+                props.disabled != true &&
+                  "cursor-pointer hover:bg-emerald-200 hover:text-emerald-700"
               ),
           // active === false && "opacity-90",
 

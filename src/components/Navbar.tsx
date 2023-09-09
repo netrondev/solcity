@@ -1,23 +1,18 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar } from "./Avatar";
 import { NavbarAdmin } from "./NavbarAdmin";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Button from "./Button";
 import { SolanaPublicInfo } from "./SolanaPublicInfo";
 
 import { useAppState } from "~/hooks/useAppState";
+import { Loading } from "./Loading";
 export function Navbar() {
   const session = useSession();
   const appState = useAppState();
 
   return (
-    <nav className="flex gap-2 p-2">
-      <Button
-        className="items-center gap-0 border-none text-gray-900 dark:bg-transparent dark:text-white dark:hover:bg-transparent hover:dark:text-white"
-        href="/"
-      >
-        SolCity
-      </Button>
+    <nav className="flex gap-4">
+      <Button href="/">SolCity</Button>
       <div className="flex-1" />
 
       {session.status === "authenticated" && (
@@ -53,9 +48,7 @@ export function Navbar() {
         </Button>
       )}
 
-      {session.status === "loading" && (
-        <AiOutlineLoading3Quarters className="animate-spin self-center text-emerald-400" />
-      )}
+      {session.status === "loading" && <Loading />}
     </nav>
   );
 }

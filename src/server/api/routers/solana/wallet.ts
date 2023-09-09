@@ -4,7 +4,7 @@ import {
   GetPublicKeyForUser,
   GetSecretKeypairForUser,
 } from "./GetPublicKeyForUser";
-import { solanaWithdrawal } from "./Withdraw";
+import { SendAndConfirm } from "./Withdraw";
 import { PublicKey } from "@solana/web3.js";
 import { GetTransactionHistory } from "./GetTXHistory";
 
@@ -20,7 +20,7 @@ export const solana_wallet_router = createTRPCRouter({
         user_id: ctx.session.user.id,
       });
 
-      const result = await solanaWithdrawal({
+      const result = await SendAndConfirm({
         keypair: getKeypair.keypair,
         toPubkey: new PublicKey(input.toPubkey),
         lamports: input.lamports,
@@ -28,10 +28,14 @@ export const solana_wallet_router = createTRPCRouter({
 
       return result;
     }),
-  GetTransactionHistory: protectedProcedure.query(async ({ ctx }) => {
-    const data = await GetTransactionHistory(
-      new PublicKey(ctx.session.user.publicKey)
-    );
-    return data;
-  }),
+  GetTransactionHistory: protectedProcedure
+    .input(z.object({ publicKey: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const pubkey = new PublicKey(
+        input?.publicKey ?? ctx.session.user.publicKey
+      );
+
+      const data = await GetTransactionHistory(pubkey);
+      return data;
+    }),
 });

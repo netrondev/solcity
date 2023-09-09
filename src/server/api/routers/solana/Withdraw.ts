@@ -10,7 +10,7 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 
-export async function solanaWithdrawal(props: {
+export async function SendAndConfirm(props: {
   keypair: Keypair;
   toPubkey: PublicKey;
   lamports: number;

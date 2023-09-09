@@ -4,6 +4,7 @@ import { Section } from "./Section";
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Loading } from "./Loading";
 
 export function SolanaPublicInfo(props: {
   publicKey: string;
@@ -33,7 +34,7 @@ export function SolanaPublicInfo(props: {
     return (
       <>
         {balance === null ? (
-          <AiOutlineLoading3Quarters className="animate-spin" />
+          <Loading />
         ) : (
           <>{(balance / LAMPORTS_PER_SOL).toFixed(8)} SOL</>
         )}
@@ -53,7 +54,7 @@ export function SolanaPublicInfo(props: {
         <span>Balance:</span>
         <div className="h-6">
           {balance === null ? (
-            <AiOutlineLoading3Quarters className="animate-spin" />
+            <Loading />
           ) : (
             <pre>{(balance / LAMPORTS_PER_SOL).toFixed(8)} SOL</pre>
           )}

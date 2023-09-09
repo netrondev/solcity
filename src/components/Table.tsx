@@ -18,7 +18,10 @@ export function Table<T>(props: { data: T[]; columns: ColumnDef<T>[] }) {
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th key={header.id}>
+              <th
+                key={header.id}
+                className="border-b border-b-emerald-500 px-2 text-xs uppercase text-emerald-500"
+              >
                 {header.isPlaceholder
                   ? null
                   : flexRender(
@@ -34,7 +37,10 @@ export function Table<T>(props: { data: T[]; columns: ColumnDef<T>[] }) {
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id} className="border border-neutral-500 p-2">
+              <td
+                key={cell.id}
+                className="border-y border-neutral-500/30 px-2 py-2 text-xs"
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}
