@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Section } from "./Section";
 import { useRouter } from "next/router";
 import { AppVersion } from "./Version";
+import { Loading } from "./Loading";
 
 export function AdminCheck(props: { children: ReactNode }) {
   const session = useSession();
@@ -48,25 +49,8 @@ export default function Layout(props: { children: ReactNode }) {
     if (!mounted) setMounted(true);
   }, [mounted]);
 
-  if (session.status === "loading") return <div>loading...</div>;
+  if (session.status === "loading") return <Loading />;
 
-  // return props.children;
-
-  // if (session.status === "unauthenticated")
-  //   return (
-  //     <div className="p-10">
-  //       SolCity.tech
-  //       <Button
-  //         onClick={() => {
-  //           signIn().catch(console.error);
-  //         }}
-  //       >
-  //         Signin
-  //       </Button>
-  //     </div>
-  //   );
-
-  // if (session.status === "authenticated") {
   return (
     <div className="min-h-screen overflow-auto border-neutral-300 bg-gray-50 font-mono text-gray-900 dark:bg-neutral-950 dark:text-emerald-100/80">
       <div className="mx-auto flex max-w-3xl flex-col gap-5 px-5 pt-5">
@@ -76,7 +60,4 @@ export default function Layout(props: { children: ReactNode }) {
       </div>
     </div>
   );
-  // }
-
-  // return <div>...</div>;
 }
