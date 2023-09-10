@@ -9,19 +9,15 @@ import {
   type PublicKey,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
+import { env } from "~/env.mjs";
 
 export async function SendAndConfirm(props: {
   keypair: Keypair;
   toPubkey: PublicKey;
   lamports: number;
 }) {
-  // console.log(props);
-  // return;
-
-  const connection = new Connection("https://api.metaplex.solana.com");
+  const connection = new Connection(env.SOLANA_RPC);
   const transaction = new Transaction();
-
-  //   const toPubkey = new PublicKey("targetaccountpubkeyhere");
 
   const newtransaction = transaction.add(
     SystemProgram.transfer({

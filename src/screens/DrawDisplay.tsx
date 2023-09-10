@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "~/components/Button";
 import { Countdown } from "~/components/Countdown";
 import { Heading } from "~/components/Heading";
@@ -9,43 +9,7 @@ import { Section } from "~/components/Section";
 import { SolanaPublicInfo } from "~/components/SolanaPublicInfo";
 import { useAppState } from "~/hooks/useAppState";
 import { api, type RouterOutputs } from "~/utils/api";
-import {
-  // GetBalanceConfig,
-  // AccountBalancePair,
-  type Keypair,
-  LAMPORTS_PER_SOL,
-  Connection,
-  Transaction,
-  SystemProgram,
-  PublicKey,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js";
-
-async function PredictFee(input: {
-  fromPubkey: PublicKey;
-  toPubkey: PublicKey;
-  lamports: number;
-}) {
-  const connection = new Connection("https://api.metaplex.solana.com");
-  const { blockhash } = await connection.getLatestBlockhash();
-
-  const transaction = new Transaction({
-    feePayer: input.fromPubkey,
-    recentBlockhash: blockhash,
-  })
-    .add(
-      SystemProgram.transfer({
-        fromPubkey: input.fromPubkey,
-        toPubkey: input.toPubkey,
-        lamports: input.lamports,
-      })
-    )
-    .compileMessage();
-
-  const response = await connection.getFeeForMessage(transaction, "confirmed");
-  const feeInLamports = response.value;
-  return feeInLamports;
-}
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 export function DrawDisplay({
   draw,
@@ -58,43 +22,21 @@ export function DrawDisplay({
 }) {
   const appState = useAppState();
   const session = useSession();
+  const [enter_lamports, setEnterSol] = useState(0);
 
   const api_enter_draw = api.solcity.draws.enter_draw.useMutation();
+
+  const feeprediction_query = api.solana.getFeePrediction.useQuery({
+    toPubkey: draw.publicKey,
+    lamports: enter_lamports ?? 0,
+  });
 
   const userLamports = appState.balance_lamports
     ? appState.balance_lamports
     : 0;
 
-  const [feeprediction, setFeePrediction] = useState<number>(5000);
+  const feeprediction = feeprediction_query.data?.fee ?? 5000;
   const userLamportsMaxMinusFee = userLamports - feeprediction;
-
-  const [enter_lamports, setEnterSol] = useState(
-    userLamportsMaxMinusFee > 0 ? userLamportsMaxMinusFee : 0
-  );
-
-  useEffect(() => {
-    if (userLamportsMaxMinusFee > 0 && enter_lamports <= feeprediction) {
-      setEnterSol(userLamportsMaxMinusFee);
-    }
-    if (session.data) {
-      PredictFee({
-        fromPubkey: new PublicKey(session.data.user.publicKey),
-        toPubkey: new PublicKey(draw.publicKey),
-        lamports: enter_lamports,
-      })
-        .then((fee) => {
-          if (fee) setFeePrediction(fee);
-        })
-        .catch(console.error);
-    }
-  }, [
-    appState.balance_lamports,
-    draw.publicKey,
-    enter_lamports,
-    feeprediction,
-    session.data,
-    userLamportsMaxMinusFee,
-  ]);
 
   return (
     <Section className="gap-0">
