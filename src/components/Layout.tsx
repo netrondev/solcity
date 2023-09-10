@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Section } from "./Section";
 import { useRouter } from "next/router";
+import { AppVersion } from "./Version";
 
 export function AdminCheck(props: { children: ReactNode }) {
   const session = useSession();
@@ -71,6 +72,7 @@ export default function Layout(props: { children: ReactNode }) {
       <div className="mx-auto flex max-w-3xl flex-col gap-5 px-5 pt-5">
         <Navbar />
         {props.children}
+        <AppVersion />
       </div>
     </div>
   );
