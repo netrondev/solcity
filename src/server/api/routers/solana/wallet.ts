@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "../../trpc";
 import {
   GetPublicKeyForUser,
   GetSecretKeypairForUser,
@@ -7,6 +11,8 @@ import {
 import { SendAndConfirm } from "./Withdraw";
 import { PublicKey } from "@solana/web3.js";
 import { GetTransactionHistory } from "./GetTXHistory";
+import { GetBalance } from "./wallet_function";
+import { TRPCError } from "@trpc/server";
 
 export const solana_wallet_router = createTRPCRouter({
   account: protectedProcedure.query(async ({ ctx }) => {
@@ -36,6 +42,22 @@ export const solana_wallet_router = createTRPCRouter({
       );
 
       const data = await GetTransactionHistory(pubkey);
+      return data;
+    }),
+  get_balance: publicProcedure
+    .input(z.object({ publicKey: z.string().optional() }).optional())
+    .query(async ({ ctx, input }) => {
+      const pubkeystring = input?.publicKey ?? ctx.session?.user.publicKey;
+
+      if (!pubkeystring) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "missing publicKey from request.",
+        });
+      }
+
+      const publicKey = new PublicKey(pubkeystring);
+      const data = await GetBalance({ publicKey });
       return data;
     }),
 });

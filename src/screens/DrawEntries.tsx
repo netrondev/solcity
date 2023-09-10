@@ -25,6 +25,8 @@ export function DrawEntries(props: {
     publicKey: props.draw.publicKey,
   });
 
+  const session = useSession();
+
   return (
     <Section>
       <Heading>Entries</Heading>
@@ -60,6 +62,16 @@ export function DrawEntries(props: {
           {
             accessorKey: "date",
             cell: (p) => moment(p.row.original.date).fromNow(),
+          },
+          {
+            accessorKey: "description",
+            cell: (p) => {
+              if (p.row.original.source === session.data?.user.publicKey) {
+                return <>You entered</>;
+              }
+
+              return <></>;
+            },
           },
           // {
           //   accessorKey: "fee",

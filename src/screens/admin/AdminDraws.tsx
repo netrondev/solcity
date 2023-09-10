@@ -65,6 +65,17 @@ function AdminDrawList() {
             accessorKey: "id",
           },
           {
+            accessorKey: "is_closed",
+            header: "status",
+            cell: (c) => {
+              if (c.row.original.is_last) return <span>last</span>;
+              if (c.row.original.is_next) return <span>next</span>;
+              if (c.row.original.is_closed) return <span>closed</span>;
+              if (c.row.original.is_open) return <span>open</span>;
+              return <span>invalid</span>;
+            },
+          },
+          {
             accessorKey: "publicKey",
             header: "Balance",
             cell: (c) => {
@@ -81,6 +92,19 @@ function AdminDrawList() {
             cell: (c) => {
               return (
                 <span>{moment(c.row.original.draw_datetime).fromNow()}</span>
+              );
+            },
+          },
+          {
+            accessorKey: "id",
+            cell: (c) => {
+              return (
+                <Button
+                  href={`/draw/${c.row.original.id.split(":")[1]!}`}
+                  className="p-0 px-1"
+                >
+                  details
+                </Button>
               );
             },
           },

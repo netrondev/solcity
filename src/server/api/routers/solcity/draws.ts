@@ -10,6 +10,9 @@ import { Keypair, PublicKey } from "@solana/web3.js";
 import { TRPCError } from "@trpc/server";
 import { GetSecretKeypairForUser } from "../solana/GetPublicKeyForUser";
 import { SendAndConfirm } from "../solana/Withdraw";
+import { get_draws as get_draws_list } from "./draws_functions";
+import { GetTransactionHistory } from "../solana/GetTXHistory";
+import { GetBalance } from "../solana/wallet_function";
 
 export const drawsRouter = createTRPCRouter({
   /** DEV ENDPOINT TO CLEAR OLD DRAWS */
@@ -52,69 +55,8 @@ export const drawsRouter = createTRPCRouter({
     }),
 
   list: publicProcedure.query(async () => {
-    const db = await getDB();
-
-    const draws = await db.query<
-      [{ publicKey: string; draws: { draw_datetime: Date; id: string } }[]]
-    >(
-      `SELECT publicKey, draw_id as draws FROM keypairs WHERE draw_id FETCH draws;`
-    );
-
-    const output = draws.at(0)?.result;
-
-    if (!output) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
-
-    const parsed = z
-      .array(
-        z
-          .object({
-            publicKey: z.string(),
-            draws: z.object({ draw_datetime: z.coerce.date(), id: z.string() }),
-          })
-          .strict()
-      )
-      .parse(output);
-
-    let first_open_found = false;
-
-    const draw_calc = parsed
-      .map((i) => ({
-        ...i,
-        ...i.draws,
-        draws: undefined,
-      }))
-      .map((i) => ({
-        ...i,
-        is_closed: i.draw_datetime.getTime() < new Date().getTime(),
-        is_open: i.draw_datetime.getTime() > new Date().getTime(),
-      }))
-      .sort((a, b) => (a.draw_datetime > b.draw_datetime ? 1 : -1))
-      .map((i) => {
-        let is_next = false;
-
-        if (i.is_open && !first_open_found) {
-          is_next = true;
-          first_open_found = true;
-        }
-
-        return {
-          ...i,
-          is_next,
-        };
-      })
-      .map((i, idx, arr) => {
-        let is_last = false;
-        const next = arr[idx + 1];
-        if (i.is_closed) {
-          if ((next && next.is_open) ?? !next) {
-            is_last = true;
-          }
-        }
-
-        return { ...i, is_last };
-      });
-
-    return draw_calc;
+    const data = await get_draws_list();
+    return data;
   }),
   enter_draw: protectedProcedure
     .input(z.object({ toPubkey: z.string().min(8), lamports: z.number() }))
@@ -130,5 +72,24 @@ export const drawsRouter = createTRPCRouter({
       });
 
       return result;
+    }),
+  run_draw: adminProcedure
+    .input(
+      z.object({
+        draw_id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const draws = await get_draws_list();
+      const draw = draws.find((i) => i.id.endsWith(input.draw_id));
+      if (!draw) throw new TRPCError({ code: "NOT_FOUND" });
+      const publicKey = new PublicKey(draw.publicKey);
+      const transactions = await GetTransactionHistory(publicKey);
+
+      const balance = await GetBalance({
+        publicKey,
+      });
+
+      return { draw, balance, transactions };
     }),
 });

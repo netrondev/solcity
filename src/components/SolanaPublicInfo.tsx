@@ -1,45 +1,29 @@
 import { QRCodeSVG } from "qrcode.react";
-import { LAMPORTS_PER_SOL, Connection, PublicKey } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Section } from "./Section";
-import { useEffect, useState } from "react";
 import Button from "./Button";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Loading } from "./Loading";
+import { api } from "~/utils/api";
 
 export function SolanaPublicInfo(props: {
   publicKey: string;
   onlyString?: boolean;
   onGetBalance?: (balance: number) => void;
 }) {
-  const [balance, setBalance] = useState<number | null>(null);
-
-  // todo make trpc endpoint instead
-  async function GetBalance(publicKey: string) {
-    setBalance(null);
-    const pub = new PublicKey(publicKey);
-    const connection = new Connection(
-      "https://ultra-old-night.solana-mainnet.discover.quiknode.pro/a26d599c6398bc9616dca4e316cddb38d7fe4d32/"
-    );
-
-    const value = await connection.getBalance(pub);
-    if (props.onGetBalance) props.onGetBalance(value);
-    setBalance(value);
-  }
-
-  useEffect(() => {
-    void GetBalance(props.publicKey);
-  }, [props.publicKey]);
+  const balanceRequest = api.solana.wallet.get_balance.useQuery({
+    publicKey: props.publicKey,
+  });
 
   if (props.onlyString) {
-    return (
-      <>
-        {balance === null ? (
-          <Loading />
-        ) : (
-          <>{(balance / LAMPORTS_PER_SOL).toFixed(8)} SOL</>
-        )}
-      </>
-    );
+    if (balanceRequest.isLoading) return <Loading />;
+
+    if (balanceRequest.data) {
+      return (
+        <>{(balanceRequest.data.lamports / LAMPORTS_PER_SOL).toFixed(8)} SOL</>
+      );
+    }
+
+    return <>Error</>;
   }
 
   return (
@@ -53,15 +37,16 @@ export function SolanaPublicInfo(props: {
         <pre>{props.publicKey}</pre>
         <span>Balance:</span>
         <div className="h-6">
-          {balance === null ? (
-            <Loading />
-          ) : (
-            <pre>{(balance / LAMPORTS_PER_SOL).toFixed(8)} SOL</pre>
+          {balanceRequest.isLoading && <Loading />}
+          {balanceRequest.data && (
+            <pre>
+              {(balanceRequest.data.lamports / LAMPORTS_PER_SOL).toFixed(8)} SOL
+            </pre>
           )}
         </div>
         <Button
           onClick={() => {
-            void GetBalance(props.publicKey);
+            balanceRequest.refetch().catch(console.error);
           }}
         >
           refresh
