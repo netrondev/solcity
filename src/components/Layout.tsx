@@ -49,7 +49,12 @@ export default function Layout(props: { children: ReactNode }) {
     if (!mounted) setMounted(true);
   }, [mounted]);
 
-  if (session.status === "loading") return <Loading />;
+  if (session.status === "loading")
+    return (
+      <div className="animate-pulse">
+        <Loading className="mx-auto mt-20 h-20 w-20 animate-spin" />
+      </div>
+    );
 
   return (
     <div className="min-h-screen overflow-auto border-neutral-300 bg-gray-50 font-mono text-gray-900 dark:bg-neutral-950 dark:text-emerald-100/80">
