@@ -12,6 +12,7 @@ import {
   PublicKey,
   SystemProgram,
   Transaction,
+  TransactionBlockhashCtor,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { TRPCError } from "@trpc/server";
@@ -131,42 +132,69 @@ export const drawsRouter = createTRPCRouter({
       // house, next_pot, winner_payouts
 
       const connection = new Connection(env.SOLANA_RPC);
-      const transaction = new Transaction();
 
-      const tx_1 = transaction.add(
+      const { blockhash } = await connection.getLatestBlockhash();
+      const lastValidBlockHeight = await connection.getBlockHeight();
+
+      const fromPubkey = new PublicKey(draw.publicKey);
+
+      const options: TransactionBlockhashCtor = {
+        blockhash,
+        feePayer: fromPubkey,
+        lastValidBlockHeight,
+      };
+
+      const transaction = new Transaction(options);
+
+      transaction.add(
         SystemProgram.transfer({
-          fromPubkey: new PublicKey(draw.publicKey),
+          fromPubkey,
           toPubkey: new PublicKey(env.SOLCITY_HOUSE_PUBKEY),
           lamports: pot.pot_house_cut,
         })
       );
 
-      const tx_2 = tx_1.add(
-        SystemProgram.transfer({
-          fromPubkey: new PublicKey(draw_next.publicKey),
-          toPubkey: new PublicKey(env.SOLCITY_HOUSE_PUBKEY),
-          lamports: pot.pot_rollover,
-        })
+      // TODO add winner txs
+      winner_payouts.forEach((w) => {
+        transaction.add(
+          SystemProgram.transfer({
+            fromPubkey,
+            toPubkey: w.publicKey,
+            lamports: w.lamports_win_per_pubkey,
+          })
+        );
+      });
+
+      // return result;
+
+      const fee = await connection.getFeeForMessage(
+        transaction.compileMessage(),
+        "confirmed"
       );
 
-      // TODO add winner txs
+      transaction.add(
+        SystemProgram.transfer({
+          fromPubkey,
+          toPubkey: new PublicKey(draw_next.publicKey),
+          lamports: pot.pot_rollover - (fee?.value ?? 5000),
+        })
+      );
 
       const keypair = await get_keypair_for_draw({ draw_id: draw.id });
 
       // TODO sign and send tx
-      // const result = await sendAndConfirmTransaction(
-      //   connection,
-      //   tx_2,
-      //   [props.keypair]
-      // );
-
-      // return result;
+      const result = await sendAndConfirmTransaction(connection, transaction, [
+        keypair,
+      ]);
 
       return {
+        result,
         draw,
         draw_next,
         pot,
         balance,
+        fee,
+        transaction,
         // confirm_splits,
         winner_payouts,
         transactions,
