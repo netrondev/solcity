@@ -13,6 +13,7 @@ type LotteryResult = {
   pot_next: number;
 };
 
+/** DEPRECATED */
 export function lottery_pot(props: {
   entries: Entry[];
   previous_rollover: number;

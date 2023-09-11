@@ -31,6 +31,9 @@ export const env = createEnv({
 
     // solana
     SOLANA_RPC: z.string(),
+
+    // solcity
+    SOLCITY_HOUSE_PUBKEY: z.string(),
   },
 
   /**
@@ -61,6 +64,7 @@ export const env = createEnv({
     SURREALDB_DB: process.env.SURREALDB_DB,
     // solana
     SOLANA_RPC: process.env.SOLANA_RPC,
+    SOLCITY_HOUSE_PUBKEY: process.env.SOLCITY_HOUSE_PUBKEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

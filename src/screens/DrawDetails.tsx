@@ -41,7 +41,7 @@ export function DrawDetails() {
       <DrawDisplay draw={draw} />
       <DrawEntries draw={draw} />
 
-      {/* <pre>{JSON.stringify(run_draw.data, null, 2)}</pre> */}
+      <pre className="text-xs">{JSON.stringify(run_draw.data, null, 2)}</pre>
     </Section>
   );
 }

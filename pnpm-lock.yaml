@@ -44,6 +44,9 @@ dependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  moderndash:
+    specifier: ^3.8.0
+    version: 3.8.0
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -2076,6 +2079,10 @@ packages:
       function-bind: 1.1.1
     dev: true
 
+  /hotscript@1.0.13:
+    resolution: {integrity: sha512-C++tTF1GqkGYecL+2S1wJTfoH6APGAsbb7PAWQ3iVIwgG/EFseAfEVOKFgAFq4yK3+6j1EjUD4UQ9dRJHX/sSQ==}
+    dev: false
+
   /humanize-ms@1.2.1:
     resolution: {integrity: sha512-Fl70vYtsAFb/C06PTS9dZBo7ihau+Tu/DNCk/OyHhea07S+aeMWpFFkUaXRa8fI+ScZbEI8dfSxwY7gxZ9SAVQ==}
     dependencies:
@@ -2490,6 +2497,13 @@ packages:
 
   /mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
+    dev: false
+
+  /moderndash@3.8.0:
+    resolution: {integrity: sha512-tio7i19KYUX2CDFM7CiOOGcotqJ8zWGUVjZ4fAQsBwzuDnvrloSvaDgFBdzC0SunDgfsfPERtAbTwbtXBwBRxQ==}
+    engines: {node: '>=16.15', npm: '>=8'}
+    dependencies:
+      hotscript: 1.0.13
     dev: false
 
   /moment@2.29.4:

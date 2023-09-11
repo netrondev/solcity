@@ -6,13 +6,28 @@ import {
   publicProcedure,
 } from "../../trpc";
 import { getDB } from "~/server/db";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 import { TRPCError } from "@trpc/server";
 import { GetSecretKeypairForUser } from "../solana/GetPublicKeyForUser";
 import { SendAndConfirm } from "../solana/Withdraw";
 import { get_draws as get_draws_list } from "./draws_functions";
 import { GetTransactionHistory } from "../solana/GetTXHistory";
 import { GetBalance } from "../solana/wallet_function";
+import { split_number_percentage } from "~/utils/split_number_percentage";
+import {
+  calculate_pot_splits,
+  calculate_winners,
+  solcity,
+} from "./solcity_core";
+import { env } from "~/env.mjs";
+import { get_keypair_for_draw } from "./get_keypair_for_draw";
 
 export const drawsRouter = createTRPCRouter({
   /** DEV ENDPOINT TO CLEAR OLD DRAWS */
@@ -82,7 +97,19 @@ export const drawsRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const draws = await get_draws_list();
       const draw = draws.find((i) => i.id.endsWith(input.draw_id));
+      const draw_idx = draws.findIndex((i) => i.id.endsWith(input.draw_id));
       if (!draw) throw new TRPCError({ code: "NOT_FOUND" });
+      if (draw_idx === undefined) throw new TRPCError({ code: "NOT_FOUND" });
+
+      // find next draw
+      const draw_next = draws.at(draw_idx + 1);
+
+      if (!draw_next)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "before a draw can occur a next draw must exist.",
+        });
+
       const publicKey = new PublicKey(draw.publicKey);
       const transactions = await GetTransactionHistory(publicKey);
 
@@ -90,6 +117,59 @@ export const drawsRouter = createTRPCRouter({
         publicKey,
       });
 
-      return { draw, balance, transactions };
+      const pot = calculate_pot_splits({ lamports: balance.lamports });
+
+      const { winner_payouts } = calculate_winners({
+        pot_actual: pot.pot_actual,
+        entries: transactions.map((i) => ({
+          lamports_bet: i.totalChangeAmount,
+          publicKey: new PublicKey(i.source),
+        })),
+      });
+
+      // construct transactions:
+      // house, next_pot, winner_payouts
+
+      const connection = new Connection(env.SOLANA_RPC);
+      const transaction = new Transaction();
+
+      const tx_1 = transaction.add(
+        SystemProgram.transfer({
+          fromPubkey: new PublicKey(draw.publicKey),
+          toPubkey: new PublicKey(env.SOLCITY_HOUSE_PUBKEY),
+          lamports: pot.pot_house_cut,
+        })
+      );
+
+      const tx_2 = tx_1.add(
+        SystemProgram.transfer({
+          fromPubkey: new PublicKey(draw_next.publicKey),
+          toPubkey: new PublicKey(env.SOLCITY_HOUSE_PUBKEY),
+          lamports: pot.pot_rollover,
+        })
+      );
+
+      // TODO add winner txs
+
+      const keypair = await get_keypair_for_draw({ draw_id: draw.id });
+
+      // TODO sign and send tx
+      // const result = await sendAndConfirmTransaction(
+      //   connection,
+      //   tx_2,
+      //   [props.keypair]
+      // );
+
+      // return result;
+
+      return {
+        draw,
+        draw_next,
+        pot,
+        balance,
+        // confirm_splits,
+        winner_payouts,
+        transactions,
+      };
     }),
 });
