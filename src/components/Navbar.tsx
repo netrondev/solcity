@@ -22,6 +22,7 @@ export function Navbar() {
           <Button href="/wallet" className="h-7 items-center">
             <SolanaPublicInfo
               onlyString
+              own
               publicKey={session.data.user.publicKey}
               onGetBalance={(balance_lamports) => {
                 appState.set({ balance_lamports });

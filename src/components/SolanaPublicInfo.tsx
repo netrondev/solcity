@@ -9,10 +9,15 @@ export function SolanaPublicInfo(props: {
   publicKey: string;
   onlyString?: boolean;
   onGetBalance?: (balance: number) => void;
+  own?: boolean;
 }) {
-  const balanceRequest = api.solana.wallet.get_balance.useQuery({
-    publicKey: props.publicKey,
-  });
+  const balanceRequest = api.solana.wallet.get_balance.useQuery(
+    props.own
+      ? undefined
+      : {
+          publicKey: props.publicKey,
+        }
+  );
 
   if (props.onlyString) {
     if (balanceRequest.isLoading) return <Loading />;

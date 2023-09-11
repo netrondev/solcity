@@ -16,7 +16,7 @@ export async function SendAndConfirm(props: {
   toPubkey: PublicKey;
   lamports: number;
 }) {
-  const connection = new Connection(env.SOLANA_RPC);
+  const connection = new Connection(env.SOLANA_RPC, "finalized");
   const transaction = new Transaction();
 
   const newtransaction = transaction.add(

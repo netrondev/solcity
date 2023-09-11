@@ -10,6 +10,7 @@ import { SolanaPublicInfo } from "~/components/SolanaPublicInfo";
 import { useAppState } from "~/hooks/useAppState";
 import { api, type RouterOutputs } from "~/utils/api";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { Loading } from "~/components/Loading";
 
 export function DrawDisplay({
   draw,
@@ -20,23 +21,25 @@ export function DrawDisplay({
   showLink?: boolean;
   showEntries?: boolean;
 }) {
-  const appState = useAppState();
   const session = useSession();
+
+  const balance = api.solana.wallet.get_balance.useQuery();
+
   const [enter_lamports, setEnterSol] = useState(0);
 
   const api_enter_draw = api.solcity.draws.enter_draw.useMutation();
 
-  const feeprediction_query = api.solana.getFeePrediction.useQuery({
+  const fee = api.solana.getFeePrediction.useQuery({
     toPubkey: draw.publicKey,
-    lamports: enter_lamports ?? 0,
+    lamports: 1000000, // static because else its many queries..
   });
 
-  const userLamports = appState.balance_lamports
-    ? appState.balance_lamports
-    : 0;
+  // const userLamports = appState.balance_lamports
+  //   ? appState.balance_lamports
+  //   : 0;
 
-  const feeprediction = feeprediction_query.data?.fee ?? 5000;
-  const userLamportsMaxMinusFee = userLamports - feeprediction;
+  // const feeprediction = feeprediction_query.data?.fee ?? 5000;
+  // const userLamportsMaxMinusFee = userLamports - feeprediction;
 
   return (
     <Section className="gap-0">
@@ -64,7 +67,7 @@ export function DrawDisplay({
         <Section>
           {session.status === "authenticated" && (
             <>
-              {appState.balance_lamports != null && (
+              {balance.data?.lamports != null && (
                 <>
                   <Section className="shadow-none">
                     <div className="flex flex-row items-center gap-1">
@@ -72,39 +75,65 @@ export function DrawDisplay({
                         type="number"
                         value={enter_lamports / LAMPORTS_PER_SOL}
                         className="w-full appearance-none"
-                        max={userLamportsMaxMinusFee}
+                        max={balance.data?.lamports}
                         onChange={(e) => {
-                          if (!appState.balance_lamports) return;
+                          console.log(e.target.valueAsNumber);
 
-                          setEnterSol(
-                            e.target.valueAsNumber * LAMPORTS_PER_SOL
-                          );
+                          if (!balance.data?.lamports) return;
+                          if (!fee.data) return;
+
+                          let lamports =
+                            e.target.valueAsNumber * LAMPORTS_PER_SOL;
+
+                          const max = balance.data.lamports - fee.data.fee;
+
+                          if (lamports > max) lamports = max;
+                          if (lamports < fee.data.fee * 2)
+                            lamports = fee.data.fee * 2;
+                          // console.log(lamports);
+                          // if (!appState.balance_lamports) return;
+                          setEnterSol(lamports);
                         }}
                       />
                       <Button
                         // className="bg-emerald-500 bg-emerald-500/10 text-gray-900 hover:bg-emerald-500/20 hover:text-emerald-300 dark:text-emerald-500"
                         onClick={() => {
-                          if (!appState.balance_lamports) return;
-                          setEnterSol(userLamportsMaxMinusFee);
+                          if (!balance.data?.lamports) return;
+                          if (!fee.data) return;
+
+                          setEnterSol(balance.data?.lamports - fee.data.fee);
                         }}
                       >
                         MAX
                       </Button>
                       <Button
-                        className="self-center"
+                        disabled={api_enter_draw.isLoading}
                         onClick={() => {
-                          api_enter_draw.mutate({
-                            lamports: enter_lamports,
-                            toPubkey: draw.publicKey,
-                          });
+                          api_enter_draw.mutate(
+                            {
+                              lamports: enter_lamports,
+                              toPubkey: draw.publicKey,
+                            },
+                            {
+                              onSuccess: () => {
+                                balance.refetch().catch(console.error);
+                              },
+                            }
+                          );
                         }}
                       >
-                        ENTER THIS DRAW
+                        {api_enter_draw.isLoading ? (
+                          <>
+                            <Loading className="my-0.5 text-black" /> CONFIRMING
+                          </>
+                        ) : (
+                          "ENTER THIS DRAW"
+                        )}
                       </Button>
                     </div>
-                    {feeprediction && (
+                    {fee.data && (
                       <span className="text-right text-xs">
-                        tx fee -{feeprediction / LAMPORTS_PER_SOL}
+                        tx fee -{fee.data.fee / LAMPORTS_PER_SOL}
                       </span>
                     )}
                   </Section>
