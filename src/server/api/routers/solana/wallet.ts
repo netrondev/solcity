@@ -34,12 +34,15 @@ export const solana_wallet_router = createTRPCRouter({
 
       return result;
     }),
-  GetTransactionHistory: protectedProcedure
+  GetTransactionHistory: publicProcedure
     .input(z.object({ publicKey: z.string().optional() }).optional())
     .query(async ({ ctx, input }) => {
-      const pubkey = new PublicKey(
-        input?.publicKey ?? ctx.session.user.publicKey
-      );
+      const pubkeystring = input?.publicKey ?? ctx.session?.user.publicKey;
+
+      if (!pubkeystring)
+        throw new TRPCError({ code: "BAD_REQUEST", message: "missing pubkey" });
+
+      const pubkey = new PublicKey(pubkeystring);
 
       const data = await GetTransactionHistory(pubkey);
       return data;

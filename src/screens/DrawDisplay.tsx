@@ -24,7 +24,9 @@ export function DrawDisplay({
 }) {
   const session = useSession();
 
-  const balance = api.solana.wallet.get_balance.useQuery();
+  const balance = api.solana.wallet.get_balance.useQuery(undefined, {
+    enabled: session.status === "authenticated",
+  });
 
   const [enter_lamports, setEnterSol] = useState(0);
 
@@ -78,83 +80,78 @@ export function DrawDisplay({
         )}
       </div>
 
-      {draw.is_open && session.status === "authenticated" && (
+      {draw.is_open && (
         <Section>
-          {session.status === "authenticated" && (
+          <Section className="shadow-none">
+            <div className="flex flex-row items-center gap-1">
+              <Input
+                type="number"
+                value={enter_lamports / LAMPORTS_PER_SOL}
+                className="w-full appearance-none"
+                max={balance.data?.lamports}
+                onChange={(e) => {
+                  if (!balance.data?.lamports) return;
+                  if (!fee.data) return;
+
+                  let lamports = e.target.valueAsNumber * LAMPORTS_PER_SOL;
+
+                  const max = balance.data.lamports - fee.data.fee;
+
+                  if (lamports > max) lamports = max;
+                  if (lamports < fee.data.fee * 2) lamports = fee.data.fee * 2;
+                  // console.log(lamports);
+                  // if (!appState.balance_lamports) return;
+                  setEnterSol(lamports);
+                }}
+              />
+              <Button
+                // className="bg-emerald-500 bg-emerald-500/10 text-gray-900 hover:bg-emerald-500/20 hover:text-emerald-300 dark:text-emerald-500"
+                disabled={session.status != "authenticated"}
+                onClick={() => {
+                  if (!balance.data?.lamports) return;
+                  if (!fee.data) return;
+
+                  setEnterSol(balance.data?.lamports - fee.data.fee);
+                }}
+              >
+                MAX
+              </Button>
+              <Button
+                disabled={
+                  api_enter_draw.isLoading || session.status != "authenticated"
+                }
+                onClick={() => {
+                  api_enter_draw.mutate(
+                    {
+                      lamports: enter_lamports,
+                      toPubkey: draw.publicKey,
+                    },
+                    {
+                      onSuccess: () => {
+                        balance.refetch().catch(console.error);
+                      },
+                    }
+                  );
+                }}
+              >
+                {api_enter_draw.isLoading ? (
+                  <>
+                    <Loading className="my-0.5 text-black" /> CONFIRMING
+                  </>
+                ) : (
+                  "ENTER THIS DRAW"
+                )}
+              </Button>
+            </div>
+            {fee.data && (
+              <span className="text-right text-xs">
+                tx fee -{fee.data.fee / LAMPORTS_PER_SOL}
+              </span>
+            )}
+          </Section>
+
+          {your_entry_total > 0 && (
             <>
-              {balance.data?.lamports != null && (
-                <>
-                  <Section className="shadow-none">
-                    <div className="flex flex-row items-center gap-1">
-                      <Input
-                        type="number"
-                        value={enter_lamports / LAMPORTS_PER_SOL}
-                        className="w-full appearance-none"
-                        max={balance.data?.lamports}
-                        onChange={(e) => {
-                          console.log(e.target.valueAsNumber);
-
-                          if (!balance.data?.lamports) return;
-                          if (!fee.data) return;
-
-                          let lamports =
-                            e.target.valueAsNumber * LAMPORTS_PER_SOL;
-
-                          const max = balance.data.lamports - fee.data.fee;
-
-                          if (lamports > max) lamports = max;
-                          if (lamports < fee.data.fee * 2)
-                            lamports = fee.data.fee * 2;
-                          // console.log(lamports);
-                          // if (!appState.balance_lamports) return;
-                          setEnterSol(lamports);
-                        }}
-                      />
-                      <Button
-                        // className="bg-emerald-500 bg-emerald-500/10 text-gray-900 hover:bg-emerald-500/20 hover:text-emerald-300 dark:text-emerald-500"
-                        onClick={() => {
-                          if (!balance.data?.lamports) return;
-                          if (!fee.data) return;
-
-                          setEnterSol(balance.data?.lamports - fee.data.fee);
-                        }}
-                      >
-                        MAX
-                      </Button>
-                      <Button
-                        disabled={api_enter_draw.isLoading}
-                        onClick={() => {
-                          api_enter_draw.mutate(
-                            {
-                              lamports: enter_lamports,
-                              toPubkey: draw.publicKey,
-                            },
-                            {
-                              onSuccess: () => {
-                                balance.refetch().catch(console.error);
-                              },
-                            }
-                          );
-                        }}
-                      >
-                        {api_enter_draw.isLoading ? (
-                          <>
-                            <Loading className="my-0.5 text-black" /> CONFIRMING
-                          </>
-                        ) : (
-                          "ENTER THIS DRAW"
-                        )}
-                      </Button>
-                    </div>
-                    {fee.data && (
-                      <span className="text-right text-xs">
-                        tx fee -{fee.data.fee / LAMPORTS_PER_SOL}
-                      </span>
-                    )}
-                  </Section>
-                </>
-              )}
-
               <span>YOUR ENTRY</span>
               <span className="text-3xl font-bold">
                 {your_entry_total / LAMPORTS_PER_SOL} SOL
