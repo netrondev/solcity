@@ -25,7 +25,7 @@ export function DrawDetails() {
     <Section>
       <div className="flex items-center justify-between">
         <Heading>Draw Details</Heading>
-        {session.data?.user.is_admin && (
+        {session.data?.user.is_admin && draw.is_closed && (
           <Button
             className="py-0"
             onClick={() => {
