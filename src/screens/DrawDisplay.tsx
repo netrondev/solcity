@@ -11,6 +11,7 @@ import { useAppState } from "~/hooks/useAppState";
 import { api, type RouterOutputs } from "~/utils/api";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { Loading } from "~/components/Loading";
+import { sum } from "moderndash";
 
 export function DrawDisplay({
   draw,
@@ -33,6 +34,20 @@ export function DrawDisplay({
     toPubkey: draw.publicKey,
     lamports: 1000000, // static because else its many queries..
   });
+
+  const history = api.solana.wallet.GetTransactionHistory.useQuery({
+    publicKey: draw.publicKey,
+  });
+
+  // YOUR ENTRIES
+  const your_entries = history.data?.filter(
+    (i) =>
+      i.source === session.data?.user.publicKey &&
+      i.destination === draw.publicKey
+  );
+  const your_entry_total = sum(
+    your_entries?.map((i) => i.totalChangeAmount) ?? [0]
+  );
 
   // const userLamports = appState.balance_lamports
   //   ? appState.balance_lamports
@@ -141,7 +156,9 @@ export function DrawDisplay({
               )}
 
               <span>YOUR ENTRY</span>
-              <span className="text-3xl font-bold">0 SOL</span>
+              <span className="text-3xl font-bold">
+                {your_entry_total / LAMPORTS_PER_SOL} SOL
+              </span>
             </>
           )}
         </Section>
