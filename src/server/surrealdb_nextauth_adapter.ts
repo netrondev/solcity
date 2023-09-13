@@ -20,7 +20,7 @@ const AdapterAccountZod = z.object({
   userId: z.string(),
   id: z.string(),
   providerAccountId: z.string(),
-  refresh_token: z.string(),
+  refresh_token: z.string().optional(),
   scope: z.string(),
   provider: z.string(),
   token_type: z.string(),
