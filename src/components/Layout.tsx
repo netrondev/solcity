@@ -7,6 +7,9 @@ import { Section } from "./Section";
 import { useRouter } from "next/router";
 import { AppVersion } from "./Version";
 import { Loading } from "./Loading";
+import NewHomePage from "./NewHomePage";
+import Home from "~/pages";
+import Homebg from "~/pages/Home";
 
 export function AdminCheck(props: { children: ReactNode }) {
   const session = useSession();
@@ -56,13 +59,15 @@ export default function Layout(props: { children: ReactNode }) {
       </div>
     );
 
-  return (
-    <div className="min-h-screen overflow-auto border-neutral-300 bg-gray-50 font-mono text-gray-900 dark:bg-neutral-950 dark:text-emerald-100/80">
-      <div className="mx-auto flex max-w-3xl flex-col gap-5 px-5 pt-5">
+  return ( <div> <Homebg />
+    <div className="min-h-screen overflow-auto border-neutral-300 bg-gray-50 font-mono text-gray-900 bg-transparent dark:text-emerald-100/80 relative">
+    <div className="mx-auto flex max-w-3xl flex-col gap-5 px-5 pt-5 ">
+     
         <Navbar />
         {props.children}
         <AppVersion />
       </div>
-    </div>
+    </div></div>
   );
 }
+
