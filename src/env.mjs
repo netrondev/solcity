@@ -23,11 +23,11 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
     // surrealdb
-    SURREALDB_HOST: z.string(),
+    NEXT_PUBLIC_SURREALDB_HOST: z.string(),
     SURREALDB_USER: z.string(),
     SURREALDB_PASS: z.string(),
-    SURREALDB_NS: z.string(),
-    SURREALDB_DB: z.string(),
+    NEXT_PUBLIC_SURREALDB_NS: z.string(),
+    NEXT_PUBLIC_SURREALDB_DB: z.string(),
 
     // solana
     SOLANA_RPC: z.string(),
@@ -47,6 +47,9 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_SURREALDB_HOST: z.string(),
+    NEXT_PUBLIC_SURREALDB_NS: z.string(),
+    NEXT_PUBLIC_SURREALDB_DB: z.string(),
   },
 
   /**
@@ -61,11 +64,11 @@ export const env = createEnv({
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     // Surrealdb
-    SURREALDB_HOST: process.env.SURREALDB_HOST,
+    NEXT_PUBLIC_SURREALDB_HOST: process.env.NEXT_PUBLIC_SURREALDB_HOST,
     SURREALDB_USER: process.env.SURREALDB_USER,
     SURREALDB_PASS: process.env.SURREALDB_PASS,
-    SURREALDB_NS: process.env.SURREALDB_NS,
-    SURREALDB_DB: process.env.SURREALDB_DB,
+    NEXT_PUBLIC_SURREALDB_NS: process.env.NEXT_PUBLIC_SURREALDB_NS,
+    NEXT_PUBLIC_SURREALDB_DB: process.env.NEXT_PUBLIC_SURREALDB_DB,
     // solana
     SOLANA_RPC: process.env.SOLANA_RPC,
     SOLCITY_HOUSE_PUBKEY: process.env.SOLCITY_HOUSE_PUBKEY,

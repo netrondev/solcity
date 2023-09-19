@@ -11,6 +11,7 @@ import { env } from "~/env.mjs";
 import { SurrealAdapter } from "./surrealdb_nextauth_adapter";
 import { GetPublicKeyForUser } from "./api/routers/solana/GetPublicKeyForUser";
 import { adminusers } from "./adminusers";
+import { getDB } from "./db";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -25,6 +26,7 @@ declare module "next-auth" {
       // ...other properties
       is_admin?: boolean;
       publicKey: string;
+      sessionToken: string;
     };
   }
 
@@ -46,6 +48,15 @@ export const authOptions: NextAuthOptions = {
 
       const pub = await GetPublicKeyForUser({ user_id: props.user.id });
 
+      const db = await getDB();
+      const user = await db
+        .query<[{ sessionToken: string }]>(
+          `SELECT * FROM ONLY session WHERE userId = "${props.user.id}" ORDER BY expires DESC LIMIT 1;`
+        )
+        .then((d) => d.at(0)!.result);
+
+      if (!user) throw new Error("Could not find sessionToken");
+
       return {
         ...session,
         user: {
@@ -55,6 +66,7 @@ export const authOptions: NextAuthOptions = {
           is_admin: session.user.email
             ? adminusers.includes(session.user.email)
             : undefined,
+          sessionToken: user.sessionToken,
         },
       };
     },
