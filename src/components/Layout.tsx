@@ -59,7 +59,6 @@ export default function Layout(props: { children: ReactNode }) {
 
   return (
     <div>
-      {" "}
       <Starsbg />
       <div className="relative min-h-screen overflow-auto border-neutral-300 bg-gray-50 bg-transparent font-mono text-gray-900 dark:text-emerald-100/80">
         <div className="mx-auto flex max-w-3xl flex-col gap-5 px-5 pt-5 ">
