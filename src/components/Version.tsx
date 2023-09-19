@@ -6,3 +6,7 @@ export function AppVersion() {
     </div>
   );
 }
+
+export function AppName() {
+  return <span>{packageInfo.name}</span>;
+}

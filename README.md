@@ -4,7 +4,7 @@ Install surrealdb: https://surrealdb.com/install
 
 ```sh
 # Run from the same folder:
-surreal start -A --auth --user root --pass YoURS3CR3T file://main.db
+surreal start -A --auth --user root --pass root file://main.db
 ```
 
 ```sh
