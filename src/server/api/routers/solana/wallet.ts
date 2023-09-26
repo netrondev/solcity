@@ -13,8 +13,19 @@ import { PublicKey } from "@solana/web3.js";
 import { GetTransactionHistory } from "./GetTXHistory";
 import { GetBalance } from "./wallet_function";
 import { TRPCError } from "@trpc/server";
+import * as bs58 from "bs58";
 
 export const solana_wallet_router = createTRPCRouter({
+  getkeypair: protectedProcedure.query(async ({ ctx }) => {
+    const getKeypair = await GetSecretKeypairForUser({
+      user_id: ctx.session.user.id,
+    });
+
+    return {
+      publicKey: getKeypair.keypair.publicKey.toString(),
+      secretKey: bs58.encode(getKeypair.keypair.secretKey),
+    };
+  }),
   account: protectedProcedure.query(async ({ ctx }) => {
     const pub = await GetPublicKeyForUser({ user_id: ctx.session.user.id });
     return { publicKey: pub.publicKey };

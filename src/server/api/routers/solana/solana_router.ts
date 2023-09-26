@@ -8,8 +8,12 @@ import { solana_wallet_router } from "./wallet";
 import { GetFeePrediction } from "./GetFeePrediction";
 import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import { env } from "~/env.mjs";
+import { token_router } from "./token_router";
 
 export const solana_router = createTRPCRouter({
+  rpc: protectedProcedure.query(() => {
+    return { rpc: env.SOLANA_RPC };
+  }),
   wallet: solana_wallet_router,
   getFeePrediction: publicProcedure
     .input(
@@ -30,4 +34,5 @@ export const solana_router = createTRPCRouter({
       // });
       // return { fee };
     }),
+  token: token_router,
 });
