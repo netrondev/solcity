@@ -26,6 +26,11 @@ import { Loading } from "~/components/Loading";
 import * as bs58 from "bs58";
 import Link from "next/link";
 import { useState } from "react";
+import { Input } from "~/components/Input";
+import { Label } from "~/components/Label";
+import { TokensList } from "~/screens/tokens/TokensList";
+import { TokenMint } from "~/screens/tokens/TokenMint";
+import { TokenMintList } from "~/screens/tokens/TokenMintList";
 
 async function MintToken(inputs: { connection: Connection; keypair: Keypair }) {
   const mintPubkey = await createMint(
@@ -67,6 +72,12 @@ export default function MintPage() {
   return (
     <Section>
       <Heading>MINT</Heading>
+
+      <TokenMint />
+
+      <TokenMintList />
+
+      <TokensList />
 
       <Button
         onClick={async () => {
