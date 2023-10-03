@@ -11,6 +11,9 @@ export function NavbarAdmin() {
   if (session.data.user.is_admin)
     return (
       <div>
+        <Button href="/mint">Mint</Button>
+        <Button href="/trade">Trade</Button>
+        <Button href="/rouan">Algorithm</Button>
         <Button href="/admin">Admin</Button>
       </div>
     );

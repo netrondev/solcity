@@ -13,6 +13,7 @@ export function Navbar() {
   return (
     <nav className="flex gap-4">
       <Button href="/">SolCity</Button>
+
       <div className="flex-1" />
 
       {session.status === "authenticated" && (
