@@ -10,7 +10,7 @@ export function NavbarAdmin() {
 
   if (session.data.user.is_admin)
     return (
-      <div>
+      <div className="flex gap-5">
         <Button href="/mint">Mint</Button>
         <Button href="/trade">Trade</Button>
         <Button href="/rouan">Algorithm</Button>

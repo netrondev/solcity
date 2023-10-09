@@ -29,6 +29,7 @@
     "clsx": "^2.0.0",
     "moderndash": "^3.8.0",
     "moment": "^2.29.4",
+    "netrondata": "^0.2.65",
     "next": "^13.4.2",
     "next-auth": "^4.22.4",
     "next-themes": "^0.2.1",

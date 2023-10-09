@@ -74,10 +74,22 @@ export const token_router = createTRPCRouter({
     }),
   list_mints_for_user: protectedProcedure.query(async ({ ctx }) => {
     const db = await getDB();
-    const data = await db.query(
-      `SELECT * FROM mint WHERE user_id = ${ctx.session.user.id};`
-    );
+    const data = await db.query<
+      [
+        {
+          created_at: Date;
+          freezeAuthority: string;
+          id: string;
+          mintAuthority: string;
+          mintPubkey: string;
+          tokenName: string;
+          tokenSupply: number;
+          updated_at: Date;
+          user_id: string;
+        }[]
+      ]
+    >(`SELECT * FROM mint WHERE user_id = ${ctx.session.user.id};`);
 
-    return data;
+    return data[0].result;
   }),
 });
