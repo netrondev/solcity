@@ -6,6 +6,7 @@ import { SolanaPublicInfo } from "./SolanaPublicInfo";
 
 import { useAppState } from "~/hooks/useAppState";
 import { Loading } from "./Loading";
+
 export function Navbar() {
   const session = useSession();
   const appState = useAppState();
