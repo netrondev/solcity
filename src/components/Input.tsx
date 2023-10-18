@@ -11,7 +11,7 @@ export function Input(
     <input
       {...props}
       className={cn(
-        "rounded border-none bg-gray-200 p-1 px-2 focus:outline-none dark:bg-black",
+        "w-full rounded-xl bg-blue-900 p-2 outline outline-sky-500 ",
         props.className
       )}
     />

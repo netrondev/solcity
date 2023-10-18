@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { AppVersion } from "./Version";
 import { Loading } from "./Loading";
 import { Starsbg } from "./StarsBG";
+import Footer from "./Footer";
 
 export function AdminCheck(props: { children: ReactNode }) {
   const session = useSession();
@@ -17,11 +18,7 @@ export function AdminCheck(props: { children: ReactNode }) {
   }
 
   if (session.status === "authenticated" && session.data.user.is_admin) {
-    return (
-      <Section className="border border-purple-500 dark:border-purple-500">
-        {props.children}
-      </Section>
-    );
+    return <Section className="">{props.children}</Section>;
   }
 
   return <>NOT AUTHORIZED</>;
@@ -60,13 +57,14 @@ export default function Layout(props: { children: ReactNode }) {
   return (
     <div>
       <Starsbg />
-      <div className="relative min-h-screen overflow-auto border-neutral-300 bg-gray-50 bg-transparent font-mono text-gray-900 dark:text-emerald-100/80">
-        <div className="mx-auto flex max-w-3xl flex-col gap-5 px-5 pt-5 ">
+      <div className="relative min-h-screen overflow-auto   bg-transparent font-mono text-gray-900 dark:text-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 pt-5 ">
           <Navbar />
           {props.children}
-          <AppVersion />
         </div>
       </div>
+      <Footer />
+      <AppVersion />
     </div>
   );
 }

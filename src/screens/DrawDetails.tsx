@@ -17,14 +17,12 @@ export function DrawDetails() {
   const run_draw = api.solcity.draws.run_draw.useMutation();
 
   if (!draw)
-    return (
-      <AiOutlineLoading3Quarters className="animate-spin text-emerald-500" />
-    );
+    return <AiOutlineLoading3Quarters className="animate-spin text-blue-500" />;
 
   return (
     <Section>
       <div className="flex items-center justify-between">
-        <Heading>Draw Details</Heading>
+        {/* <Heading>Draw Details</Heading> */}
         {session.data?.user.is_admin && draw.is_closed && (
           <Button
             className="py-0"
@@ -39,7 +37,7 @@ export function DrawDetails() {
         )}
       </div>
       <DrawDisplay draw={draw} />
-      <DrawEntries draw={draw} />
+      {/* <DrawEntries draw={draw} /> */}
 
       <pre className="text-xs">{JSON.stringify(run_draw.data, null, 2)}</pre>
     </Section>

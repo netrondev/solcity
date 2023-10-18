@@ -3,23 +3,32 @@ import { Avatar } from "./Avatar";
 import { NavbarAdmin } from "./NavbarAdmin";
 import Button from "./Button";
 import { SolanaPublicInfo } from "./SolanaPublicInfo";
-
+import Image from "next/image";
 import { useAppState } from "~/hooks/useAppState";
 import { Loading } from "./Loading";
+import Button2 from "./Button2";
 export function Navbar() {
   const session = useSession();
   const appState = useAppState();
 
   return (
     <nav className="flex gap-4">
-      <Button href="/">SolCity</Button>
+      <Image
+        className="h-10 w-auto"
+        src="/assets/images/logowhite.png"
+        alt={"Sol City"}
+        width={200}
+        height={2000}
+      />
+      <Button2 href="/">Home</Button2>
+      <Button2 href="/">Wallet</Button2>
       <div className="flex-1" />
 
       {session.status === "authenticated" && (
         <>
           <NavbarAdmin />
 
-          <Button href="/wallet" className="h-7 items-center">
+          <Button2 href="/wallet" className="h-7 items-center">
             <SolanaPublicInfo
               onlyString
               own
@@ -28,7 +37,7 @@ export function Navbar() {
                 appState.set({ balance_lamports });
               }}
             />
-          </Button>
+          </Button2>
 
           <Avatar
             image={session.data.user.image}

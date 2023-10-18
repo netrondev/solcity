@@ -18,16 +18,13 @@ export function DrawCurrent() {
         .map((draw) => (
           <DrawDisplay key={draw.id} draw={draw} />
         ))} */}
-
       {drawList.data
         ?.filter((i) => i.is_next)
         .map((draw) => (
           <DrawDisplay showLink key={draw.id} draw={draw} />
         ))}
 
-      <div className="hidden">
-        <DrawHistory />
-      </div>
+      <DrawHistory />
     </div>
   );
 }

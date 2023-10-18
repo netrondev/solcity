@@ -1,5 +1,6 @@
 import { useSession } from "next-auth/react";
 import Button from "./Button";
+import Button2 from "./Button2";
 
 export function NavbarAdmin() {
   //////////////////
@@ -11,7 +12,7 @@ export function NavbarAdmin() {
   if (session.data.user.is_admin)
     return (
       <div>
-        <Button href="/admin">Admin</Button>
+        <Button2 href="/admin">Admin</Button2>
       </div>
     );
 

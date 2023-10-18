@@ -1,5 +1,5 @@
 import { Canvas, useLoader } from "@react-three/fiber";
-
+import Image from "next/image";
 import React from "react";
 import { useState, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
@@ -54,14 +54,15 @@ export function Stars() {
 export function Starsbg() {
   return (
     <>
-      <main className="absolute h-screen w-screen bg-[#030405] object-cover">
-        {/* <Image
+      {/* absolute h-screen w-screen bg-[#030405] object-cover */}
+      <main className="">
+        <Image
           height={1200 * 2}
           width={1200 * 2}
-          src="/assets/images/spacebg.png"
+          src="/assets/images/spacebg1.png"
           alt="bg"
-          className="absolute inset-0 -z-50 h-full w-full  object-cover opacity-10"
-        /> */}
+          className="absolute inset-0 -z-50 h-full w-full  object-cover opacity-50"
+        />
         <div className="absolute h-screen w-screen object-cover">
           <Canvas className="">
             <ambientLight intensity={0.01} />
