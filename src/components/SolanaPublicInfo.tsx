@@ -32,14 +32,14 @@ export function SolanaPublicInfo(props: {
   }
 
   return (
-    <Section className="flex flex-row gap-4">
-      <div className="self-start rounded bg-white p-2">
+    <Section className="">
+      <div className="mx-auto self-start rounded bg-white p-2">
         <QRCodeSVG value={props.publicKey} />
       </div>
 
-      <div>
+      <div className="mx-auto mt-2 rounded-xl bg-gray-800 md:p-2 ">
         <span>Public Key:</span>
-        <pre>{props.publicKey}</pre>
+        <pre className="text-xs md:text-base">{props.publicKey}</pre>
         <span>Balance:</span>
         <div className="h-6">
           {balanceRequest.isLoading && <Loading />}

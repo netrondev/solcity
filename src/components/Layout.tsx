@@ -9,6 +9,7 @@ import { AppVersion } from "./Version";
 import { Loading } from "./Loading";
 import { Starsbg } from "./StarsBG";
 import Footer from "./Footer";
+import NavBar from "./nav";
 
 export function AdminCheck(props: { children: ReactNode }) {
   const session = useSession();
@@ -55,16 +56,16 @@ export default function Layout(props: { children: ReactNode }) {
     );
 
   return (
-    <div>
+    <div className="bg-gradient-to-b from-black to-blue-950">
       <Starsbg />
       <div className="relative min-h-screen overflow-auto   bg-transparent font-mono text-gray-900 dark:text-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 pt-5 ">
-          <Navbar />
+          {/* <Navbar /> */}
+          <NavBar />
           {props.children}
         </div>
       </div>
       <Footer />
-      <AppVersion />
     </div>
   );
 }

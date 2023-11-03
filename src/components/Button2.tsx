@@ -57,7 +57,7 @@ export default function Button2(
                 " border border-white text-white dark:text-white",
                 props.disabled
                   ? "opacity-50"
-                  : "cursor-pointer border border-white hover:bg-gray-800"
+                  : "cursor-pointer border border-white hover:border-none hover:bg-blue-800"
               ),
           // active === false && "opacity-90",
 

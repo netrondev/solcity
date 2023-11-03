@@ -12,40 +12,44 @@ export function Navbar() {
   const appState = useAppState();
 
   return (
-    <nav className="flex gap-4">
+    <nav className="flex gap-4 rounded-xl bg-gradient-to-b from-gray-900 to-blue-950 p-2">
       <Image
-        className="h-10 w-auto"
-        src="/assets/images/logowhite.png"
+        className="h-10 w-auto rounded-lg"
+        src="/assets/images/solcitylogo.png"
         alt={"Sol City"}
         width={200}
         height={2000}
       />
-      <Button2 href="/">Home</Button2>
-      <Button2 href="/">Wallet</Button2>
+      <div className="flex gap-5 pt-1">
+        <Button2 href="/">Home</Button2>
+        <Button2 href="/">Wallet</Button2>
+      </div>
       <div className="flex-1" />
 
       {session.status === "authenticated" && (
         <>
-          <NavbarAdmin />
+          <div className="flex gap-3 pt-1">
+            <NavbarAdmin />
 
-          <Button2 href="/wallet" className="h-7 items-center">
-            <SolanaPublicInfo
-              onlyString
-              own
-              publicKey={session.data.user.publicKey}
-              onGetBalance={(balance_lamports) => {
-                appState.set({ balance_lamports });
+            <Button2 href="/wallet" className="h-7 items-center">
+              <SolanaPublicInfo
+                onlyString
+                own
+                publicKey={session.data.user.publicKey}
+                onGetBalance={(balance_lamports) => {
+                  appState.set({ balance_lamports });
+                }}
+              />
+            </Button2>
+
+            <Avatar
+              image={session.data.user.image}
+              // image={null}
+              onClick={function (): void {
+                void signOut();
               }}
             />
-          </Button2>
-
-          <Avatar
-            image={session.data.user.image}
-            // image={null}
-            onClick={function (): void {
-              void signOut();
-            }}
-          />
+          </div>
         </>
       )}
       {session.status === "unauthenticated" && (
