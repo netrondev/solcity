@@ -1,16 +1,16 @@
 import { Fragment } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Disclosure } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import Link from "next/link";
+
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar } from "./Avatar";
 import { NavbarAdmin } from "./NavbarAdmin";
-import Button from "./Button";
+
 import { SolanaPublicInfo } from "./SolanaPublicInfo";
 
 import { useAppState } from "~/hooks/useAppState";
-import { Loading } from "./Loading";
+
 import Button2 from "./Button2";
 const navigation = [
   { name: "Home", href: "/", current: true },

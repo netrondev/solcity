@@ -1,15 +1,16 @@
 import { useEffect, type ReactNode, useState } from "react";
-import { Navbar } from "./Navbar";
+
 import { useTheme } from "next-themes";
 import { useSession } from "next-auth/react";
 
 import { Section } from "./Section";
 import { useRouter } from "next/router";
-import { AppVersion } from "./Version";
+
 import { Loading } from "./Loading";
 import { Starsbg } from "./StarsBG";
-import Footer from "./Footer";
+
 import NavBar from "./nav";
+import Footer from "./Footer1";
 
 export function AdminCheck(props: { children: ReactNode }) {
   const session = useSession();
