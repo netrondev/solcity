@@ -12,6 +12,7 @@ export function Navbar() {
   const appState = useAppState();
 
   return (
+
     <nav className="flex gap-4 rounded-xl bg-gradient-to-b from-gray-900 to-blue-950 p-2">
       <Image
         className="h-10 w-auto rounded-lg"
@@ -24,6 +25,7 @@ export function Navbar() {
         <Button2 href="/">Home</Button2>
         <Button2 href="/">Wallet</Button2>
       </div>
+
       <div className="flex-1" />
 
       {session.status === "authenticated" && (
