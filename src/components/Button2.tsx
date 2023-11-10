@@ -16,7 +16,7 @@ type ButtonEvent = Parameters<
   >
 >[0];
 
-export default function Button(
+export default function Button2(
   props: {
     icon?: ReactNode;
     children?: ReactNode;
@@ -46,18 +46,18 @@ export default function Button(
       <button
         {...rest}
         className={cn(
-          "flex whitespace-nowrap  font-bold tracking-wider text-black transition",
+          "flex whitespace-nowrap  font-bold tracking-wider text-white transition",
           size === "sm" && "gap-1 px-2 py-1 text-sm",
           size === "md" ||
-            (!size && "gap-3 rounded-sm p-1 px-2 text-sm font-semibold"),
+            (!size && "gap-3 rounded-md p-1 px-2 text-sm font-semibold"),
           size == "lg" && "gap-4 rounded-xl p-3",
           active
-            ? "bg-sky-500 text-black"
+            ? " text-white"
             : cn(
-                "m-2 rounded-xl border border-white bg-blue-700 p-2 text-emerald-100 dark:text-gray-100",
+                " border border-white text-white dark:text-white",
                 props.disabled
                   ? "opacity-50"
-                  : "cursor-pointer hover:border-none hover:bg-blue-900 hover:text-white"
+                  : "cursor-pointer border border-white hover:border-none hover:bg-blue-800"
               ),
           // active === false && "opacity-90",
 

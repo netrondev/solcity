@@ -9,9 +9,10 @@ import { HowItWorks } from "./HowItWorks";
 
 export function HomePage() {
   return (
-    <div className="flex flex-col gap-5 bg-gray-50 dark:bg-neutral-950">
+    <div className="flex flex-col gap-5  ">
       <DrawCurrent />
-      <HowItWorks />
+
+      {/* <HowItWorks /> */}
     </div>
   );
 }

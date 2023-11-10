@@ -20,7 +20,7 @@ export function Table<T>(props: { data: T[]; columns: ColumnDef<T>[] }) {
             {headerGroup.headers.map((header) => (
               <th
                 key={header.id}
-                className="border-b border-b-emerald-500 px-2 text-xs uppercase text-emerald-500"
+                className="border-b border-b-blue-500 px-2 text-xs uppercase text-blue-500"
               >
                 {header.isPlaceholder
                   ? null

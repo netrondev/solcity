@@ -8,12 +8,14 @@ export default function Home() {
       <Head>
         <title>Sol City Lottery</title>
         <meta
-          name="Sol City the best way to win"
+          name="Sol City where everyone's a winner"
           content="Build during the 2023 Solana hyperdrive hackathon"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <main>
+
         <HomePage />
       </main>
     </>

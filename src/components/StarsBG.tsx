@@ -1,5 +1,5 @@
 import { Canvas, useLoader } from "@react-three/fiber";
-
+import Image from "next/image";
 import React from "react";
 import { useState, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
@@ -8,13 +8,17 @@ import { Points, PointMaterial, Backdrop } from "@react-three/drei";
 
 export function Stars() {
   const ref = useRef();
+  // const coinTexture = new THREE.TextureLoader().load("solanacoin.png");
+  // const coin = new THREE.Mesh(
+  //   new THREE.CircleGeometry(),
+  //   new THREE.MeshBasicMaterial({ map: coinTexture })
 
   // const [sphere] = useState(() =>
   //   inSphere(new Float32Array(5000), { radius: 1.5 })
   // );
 
   const [sphere] = useState(() =>
-    new Float32Array(50000).map((i) => (Math.random() - 0.5) * 5)
+    new Float32Array(20000).map((i) => (Math.random() - 0.5) * 5)
   );
 
   console.log(sphere);
@@ -42,8 +46,8 @@ export function Stars() {
       >
         <PointMaterial
           transparent
-          color="#ffa0e0"
-          size={0.005}
+          color="#f0f2f5"
+          size={0.01}
           sizeAttenuation={true}
           depthWrite={false}
         />
@@ -54,14 +58,15 @@ export function Stars() {
 export function Starsbg() {
   return (
     <>
-      <main className="absolute h-screen w-screen bg-[#030405] object-cover">
-        {/* <Image
+      {/* absolute h-screen w-screen bg-[#030405] object-cover */}
+      <main className="">
+        <Image
           height={1200 * 2}
           width={1200 * 2}
-          src="/assets/images/spacebg.png"
+          src="/assets/images/spacebg1.png"
           alt="bg"
-          className="absolute inset-0 -z-50 h-full w-full  object-cover opacity-10"
-        /> */}
+          className="absolute inset-0  h-full w-full   object-cover opacity-50"
+        />
         <div className="absolute h-screen w-screen object-cover">
           <Canvas className="">
             <ambientLight intensity={0.01} />
