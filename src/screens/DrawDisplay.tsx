@@ -75,7 +75,7 @@ export function DrawDisplay({
           </div>
           <div className="mx-auto mt-12 max-w-7xl sm:mt-20 sm:px-6 lg:px-8">
             <div className="relative isolate overflow-hidden bg-gray-900 px-6  text-center shadow-2xl sm:rounded-3xl sm:px-16">
-              <div className=" pb-4 pt-6 sm:pb-4 sm:text-base md:pb-8 md:text-lg lg:pb-10 lg:text-xl xl:pb-14 xl:text-2xl">
+              <div className=" pb-4 pt-6 sm:pb-4 sm:text-base md:pb-8 md:text-lg lg:pb-10 lg:text-xl xl:pb-14 xl:text-2xl gap-1">
                 Draw in
                 {draw.is_next && <Countdown target={draw.draw_datetime} />}
               </div>
